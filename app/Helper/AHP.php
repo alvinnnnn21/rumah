@@ -4,7 +4,35 @@
 namespace App\Helper;
 
 class AHP
-{       
+{           
+    /// CHECK NILAI (KRITERIA DASHBOARD)
+
+    public static function cariNilaiKriteria($nilai, $kriteria1, $kriteria2)
+    {        
+        foreach($nilai as $n)
+        {
+            if($n->kriteria_1 == $kriteria1 && $n->kriteria_2 == $kriteria2)
+            {
+                return $n->nilai;
+            }
+        }
+
+        return null;
+    }
+
+    public static function cariNilaiRumah($nilai, $rumah1, $rumah2, $kriteria)
+    {           
+        foreach($nilai as $n)
+        {
+            if($n->rumah_1 == $rumah1 && $n->rumah_2 == $rumah2 && $n->kriteria == $kriteria)
+            {                
+                return $n->nilai;
+            }
+        }
+
+        return null;
+    }
+
     /// MATRIX
 
     public static function getPairWiseMatrixKriteria($kriteria)
@@ -66,32 +94,36 @@ class AHP
 
     /// FORMAT
 
-    public static function getKriteriaFormat($kriteria, $nilai)
-    {
+    public static function getKriteriaFormat($nilai)
+    {   
         $kriteria_new = [];
 
-        foreach($kriteria as $key => $k)
+        foreach($nilai as $key => $n)
         {   
-            array_push($kriteria_new, ["k1" => $k->k1, "k2" => $k->k2, "nilai" => $nilai["kriteria-" . $key]]);
+            array_push($kriteria_new, ["k1" => $n->kriteria_1, "k2" => $n->kriteria_2, "nilai" => $n->nilai]);
         }
 
         return $kriteria_new;
     }
 
-    public static function getRumahFormat($rumah, $nilai)
+    public static function getRumahFormat($nilai, $kriteria)
     {
         $rumah_new = [];
 
-        foreach($rumah as $key => $r1)
-        {       
-            $rumah_new[$key]["kriteria"] = $r1->kriteria;
+        foreach($kriteria as $key => $k)
+        {
+            $rumah_new[$key]["kriteria"] = $k;
             $rumah_new[$key]["matrix"] = [];
-                
-            foreach($r1->matrix as $key1 => $r2)
+
+            foreach($nilai as $key1 => $n)
             {   
-                array_push($rumah_new[$key]["matrix"], ["k1" => $r2->k1, "k2" => $r2->k2, "nilai" => $nilai["rumah-" . $key . "-" . $key1]]);
+                if($n->kriteria == $k)
+                {   
+                    array_push($rumah_new[$key]["matrix"], ["k1" => $n->rumah_1, "k2" => $n->rumah_2, "nilai" => $n->nilai]);
+                }
             }
-        }
+
+        }   
 
         return $rumah_new;
     }
@@ -178,7 +210,7 @@ class AHP
 
             foreach($nilai as $n)
             {
-                if($n["k1"] === $k)
+                if($n["k2"] === $k)
                 {   
                     $temp += $n["nilai"];
                 }
@@ -205,7 +237,7 @@ class AHP
     {
         foreach($nilai as $key => $n)
         {
-            $nilai[$key]["nilai"] = $n["nilai"] / AHP::getPembagiKriteria($total, $n["k1"]);
+            $nilai[$key]["nilai"] = $n["nilai"] / AHP::getPembagiKriteria($total, $n["k2"]);
         }
 
         return $nilai;
@@ -217,7 +249,7 @@ class AHP
 
         foreach($nilai as $n)
         {
-            if($n["k2"] === $kriteria)
+            if($n["k1"] === $kriteria)
             {
                 $bobot += $n["nilai"];
             }
@@ -333,7 +365,7 @@ class AHP
 
                 foreach($n1["matrix"] as $n2)
                 {
-                    if($n2["k1"] === $r)
+                    if($n2["k2"] === $r)
                     {   
                         $temp += $n2["nilai"];
                     }
@@ -353,11 +385,11 @@ class AHP
         foreach($total as $t1)
         {       
             if($t1["kriteria"] === $kriteria)
-            {
+            {   
                 foreach($t1["nilai"] as $t2)
                 {
                     if($t2["rumah"] === $rumah)
-                    {
+                    {   
                         return $t2["total"];
                     }
                 }
@@ -366,12 +398,14 @@ class AHP
     }
 
     public static function getNilaiBagiRumah($nilai, $total)
-    {
+    {   
+        $test = "";
+
         foreach($nilai as $key => $n1)
         {
             foreach($n1["matrix"] as $key1 => $n2)
-            {
-                $nilai[$key]["matrix"][$key1]["nilai"] = $n2["nilai"] / AHP::getPembagiRumah($total, $n2["k1"], $n1["kriteria"]);
+            {   
+                $nilai[$key]["matrix"][$key1]["nilai"] = $n2["nilai"] / AHP::getPembagiRumah($total, $n2["k2"], $n1["kriteria"]);
             }
         }
 
@@ -388,7 +422,7 @@ class AHP
             {
                 foreach($n1["matrix"] as $n2)
                 {
-                    if($n2["k2"] === $rumah)
+                    if($n2["k1"] === $rumah)
                     {
                         $bobot += $n2["nilai"];
                     }
@@ -449,6 +483,7 @@ class AHP
     public static function getFinal($rumah, $kriteria, $nilai_rumah, $nilai_kriteria)
     {       
         $nilai = [];
+        $test = "";
 
         foreach($rumah as $key => $r)
         {   
@@ -456,7 +491,8 @@ class AHP
             $nilai[$key]["nilai"] = 0;
 
             foreach($kriteria as $k)
-            {   
+            {       
+                $test .= (AHP::getNilaiBobotKriteriaFinal($k, $nilai_kriteria) . "*" . AHP::getNilaiBobotRumahFinal($r, $k, $nilai_rumah) . " = " . (AHP::getNilaiBobotKriteriaFinal($k, $nilai_kriteria) * AHP::getNilaiBobotRumahFinal($r, $k, $nilai_rumah)) . "\n");
                 $nilai[$key]["nilai"] += (AHP::getNilaiBobotKriteriaFinal($k, $nilai_kriteria) * AHP::getNilaiBobotRumahFinal($r, $k, $nilai_rumah));
             }
         }

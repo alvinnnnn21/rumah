@@ -26,6 +26,8 @@ Route::group(["middleware" => "auth:admin"], function(){
 
     Route::delete("/user/{id}", [AdminController::class, "destroyUser"]);
     Route::delete("/rumah/{id}", [AdminController::class, "destroyRumah"]);
+
+    Route::post("/kriteria", [AdminController::class, "storeKriteria"]);
 });
 
 Route::group(["middleware" => "auth:member"], function(){

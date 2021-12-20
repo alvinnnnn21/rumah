@@ -41,21 +41,33 @@
             <div class="col-md-10">
                 <form action="{{ url("/") }}" method="get">
                     <div class="row mt-3 mb-3 d-flex justify-content-center">
-                        <input type="text" placeholder="Cari Alamat..." name="judul" class="form-control w-75 judul">
+                        <input type="text" placeholder="Cari Alamat..." name="alamat" class="form-control w-75 alamat">
                     </div>
                     <div class="row mt-3 mb-3 pt-5 px-4 pb-4" style="border: 2px solid #e2dfdf; background-color: #ffffff; border-radius: 15px;">
-                        <div class="col-md-6">
+                        <div class="col-md-3">
+                            <label>Provinsi</label>
+                            <select class="form-control" name="provinsi">
+
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Kota</label>
+                            <select class="form-control" name="kota">
+
+                            </select>
+                        </div>
+                        <div class="col-md-3">
                             <label>Jumlah Kamar</label>
                             <select name="jumlah_kamar" class="form-control">
-                                @for($i = 0; $i < 20; $i++)
+                                @for($i = 1; $i <= 10; $i++)
                                     <option value="{{ $i }}">{{ $i }} Kamar</option>
                                 @endfor
                             </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label>Jumlah Kamar Mandi</label>
                             <select name="jumlah_kamar_mandi" class="form-control">
-                                @for($i = 0; $i < 20; $i++)
+                                @for($i = 1; $i <= 10; $i++)
                                     <option value="{{ $i }}">{{ $i }} Kamar Mandi</option>
                                 @endfor
                             </select>
@@ -63,33 +75,53 @@
                         <div class="col-md-6 mt-4">
                             <label id="label-harga">Harga (IDR)</label>
                             <div id="harga"></div>
+                            <input type="hidden" name="harga">
                         </div>
                         <div class="col-md-6 mt-4">
                             <label id="label-luas-tanah">Luas Tanah m<sup>2</sup></label>
                             <div id="luas_tanah"></div>
+                            <input type="hidden" name="luas_tanah">
                         </div>
                         <div class="col-md-6 mt-4">
                             <label id="label-luas-bangunan">Luas Bangunan m<sup>2</sup></label>
                             <div id="luas_bangunan"></div>
+                            <input type="hidden" name="luas_bangunan">
                         </div>
                         <div class="col-md-6 mt-4">
                             <label id="label-daya-listrik">Daya Listrik (VA)</label>
-                            <div id="daya_listrik"></div>
+                            <select class="form-control" name="daya_listrik">
+                                <option value="450">450 VA</option>
+                                <option value="900">900 VA</option>
+                                <option value="1300">1300 VA</option>
+                                <option value="2200">2200 VA</option>
+                                <option value="3500">3500 VA</option>
+                                <option value="4400">4400 VA</option>
+                                <option value="5500">5500 VA</option>
+                                <option value="6600">6600 VA</option>
+                                <option value="4400">7700 VA</option>
+                                <option value="10600">10600 VA</option>
+                            </select>
                         </div>
-                        <div class="col-md-3 mt-4 d-flex flex-row">
-                            <input type="checkbox" value="Ada" name="air_bersih" style="width: 20px; height: 20px; margin-top: 3px; margin-right: 8px;" name="air_bersih">
-                            <label>Air Bersih</label>
-                        </div>
-                        <div class="col-md-3 mt-4 d-flex flex-row">
-                            <input type="checkbox" name="carport" style="width: 20px; height: 20px; margin-top: 3px; margin-right: 8px;" name="car_port">
-                            <label>Car Port</label>
-                        </div>
-                        <div class="col-md-3 mt-4 d-flex flex-row">
-                            <input type="checkbox" name="kitchen_set" style="width: 20px; height: 20px; margin-top: 3px; margin-right: 8px;" name="kitchen_set">
-                            <label>Kitchen Set</label>
-                        </div>
-                        <div class="col-md-3 mt-5">
-                            <button class="btn btn-primary float-right w-75">CARI</button>
+                        <div class="d-flex flex-row w-100 align-items-center">
+                            <div class="col-md-3 mt-4">
+                                <label>Air Bersih</label>
+                                <select name="air_bersih" class="form-control">
+                                    <option value="PDAM">PDAM</option>
+                                    <option value="Air Sumur">Air Sumur</option>
+                                    <option value="Tidak Ada Air Bersih">Tidak Ada Air Bersih</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mt-4 d-flex flex-row">
+                                <input type="checkbox" name="carport" style="width: 20px; height: 20px; margin-top: 3px; margin-right: 8px;" name="car_port">
+                                <label>Car Port</label>
+                            </div>
+                            <div class="col-md-3 mt-4 d-flex flex-row">
+                                <input type="checkbox" name="kitchen_set" style="width: 20px; height: 20px; margin-top: 3px; margin-right: 8px;" name="kitchen_set">
+                                <label>Kitchen Set</label>
+                            </div>
+                            <div class="col-md-3 mt-5">
+                                <button class="btn btn-primary float-right w-75">CARI</button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -153,11 +185,10 @@
                 step: 1000,
                 range: {
                     'min': [0],
-                    'max': [999999999]
+                    'max': [300000000]
                 },
                 format: wNumb({
                     thousand: ".",
-                    suffix: "(IDR)"
                 })
             });
 
@@ -167,11 +198,10 @@
                 connect: true,
                 range: {
                     'min': 0,
-                    'max': 99999
+                    'max': 1000
                 },
                 format: wNumb({
                     thousand: ".",
-                    suffix: "m<sup>2</sup>"
                 })
             });
 
@@ -181,45 +211,29 @@
                 connect: true,
                 range: {
                     'min': 0,
-                    'max': 99999
+                    'max': 1000
                 },
                 format: wNumb({
                     thousand: ".",
-                    suffix: "m<sup>2</sup>"
-                })
-            });
-
-            noUiSlider.create(daya_listrik, {
-                start: [0, 0],
-                connect: true,
-                step: 10,
-                range: {
-                    'min': 0,
-                    'max': 999999
-                },
-                format: wNumb({
-                    thousand: ".",
-                    suffix: "VA"
                 })
             });
 
             harga.noUiSlider.on("update", function(values, handle){
-                $("#label-harga").html("Harga " + values[0] + " - " + values[1]);
+                $("#label-harga").html("Harga " + values[0] + " (IDR) - " + values[1] + " (IDR)");
+                $("input[name=harga]").val(values[0] + "-" + values[1]);
             });
 
             luas_tanah.noUiSlider.on("update", function(values, handle){
-                $("#label-luas-tanah").html("Luas Tanah " + values[0] + " - " + values[1]);
+                $("#label-luas-tanah").html("Luas Tanah " + values[0] + "m<sup>2</sup> - " + values[1] + "m<sup>2</sup>");
+                $("input[name=luas_tanah]").val(values[0] + "-" + values[1]);
             });
 
             luas_bangunan.noUiSlider.on("update", function(values, handle){
-                $("#label-luas-bangunan").html("Luas Bangunan " + values[0] + " - " + values[1]);
+                $("#label-luas-bangunan").html("Luas Tanah " + values[0] + "m<sup>2</sup> - " + values[1] + "m<sup>2</sup>");
+                $("input[name=luas_bangunan]").val(values[0] + "-" + values[1]);
             });
 
-            daya_listrik.noUiSlider.on("update", function(values, handle){
-                $("#label-daya-listrik").html("Daya Listrik " + values[0] + " - " + values[1]);
-            });
-
-            $(".judul").on("input", function(){    
+            $(".alamat").on("input", function(){    
 
                 $.ajax({
                     url: "{{ url('/search') }}",
@@ -231,7 +245,6 @@
                     },
                     success: function(data){
                         var hasil = JSON.parse(JSON.stringify(data));
-                        console.log(hasil.data.replace(/\\/g, ""));
                         $("#hasil").html(hasil.data.replace(/\\/g, ""));
                     }
                 })
@@ -243,6 +256,54 @@
                 $(this).addClass("img-active");
 
                 $(".img-rumah-" + $(this).attr("data-id")).attr("src", $(this).attr("src"));
+            });
+
+            $.ajax({
+                url: "http://www.emsifa.com/api-wilayah-indonesia/api/provinces.json",
+                method: "get",
+                success: function(data1){
+
+                    var html = "";
+
+                    for(var i = 0; i < data1.length; i++)
+                    {   
+                        html += "<option value='" + data1[i].id + "'>" + data1[i].name + "</option>";
+                    }
+
+                    $("select[name='provinsi']").html(html);
+
+                    $.ajax({
+                        url: "http://www.emsifa.com/api-wilayah-indonesia/api/regencies/" + data1[0].id + ".json",
+                        method: "get",
+                        success: function(data2){
+                            html = "";
+
+                            for(var i = 0; i < data2.length; i++)
+                            {
+                                html += "<option value='" + data2[i].name + "'>" + data2[i].name + "</option>";
+                            }
+
+                            $("select[name='kota']").html(html);
+                        }
+                    })
+                }
+            })
+
+            $("select[name='provinsi']").on("change", function(){
+                $.ajax({
+                        url: "http://www.emsifa.com/api-wilayah-indonesia/api/regencies/" + $(this).val() + ".json",
+                        method: "get",
+                        success: function(data2){
+                            html = "";
+
+                            for(var i = 0; i < data2.length; i++)
+                            {
+                                html += "<option value='" + data2[i].name + "'>" + data2[i].name + "</option>";
+                            }
+
+                            $("select[name='kota']").html(html);
+                        }
+                    })
             });
 
             function formatRupiah(angka, prefix){
