@@ -36,23 +36,34 @@ class MemberController extends Controller
             ]);
         }
         else if($request->query())
-        {               
+        {                   
             $kriteria = ["Carport", "Kitchen Set", "Air Bersih"];
 
             $rumah = Rumah::where("status", "Kosong");
-
+            
+            if(!is_null($request->kota))
+            {
+                $rumah = Rumah::where("kota", $request->kota);
+            }
+            if(!is_null($request->provinsi))
+            {
+                $rumah = Rumah::where("provinsi", $request->provinsi);
+            }
             if(!is_null($request->alamat))
             {
                 $rumah = $rumah->where('alamat', 'like', '%' . $request->keyword . '%');
             }
             if(!is_null($request->harga))
-            {
-                array_push($kriteria, "Harga");
+            {   
+                $harga = str_replace(".", "", $request->harga);
+                $split = explode("-", $harga);
 
-                $luas = str_replace(".", "", $request->harga);
-                $split = explode("-", $luas);
+                if($split[1] > 0)
+                {
+                    array_push($kriteria, "Harga");
 
-                $rumah = $rumah->whereBetween("harga", [$split[0], $split[1]]);
+                    $rumah = $rumah->whereBetween("harga", [$split[0], $split[1]]);
+                }
             }
             if(!is_null($request->jumlah_kamar))
             {
@@ -67,24 +78,30 @@ class MemberController extends Controller
             
             if(!is_null($request->luas_tanah))
             {   
-                array_push($kriteria, "Luas Tanah");
-
                 $luas = str_replace(".", "", $request->luas_tanah);
                 $split = explode("-", $luas);
 
-                $rumah = $rumah->whereBetween("luas_tanah", [$split[0], $split[1]]);
+                if($split[1] > 0)
+                {
+                    array_push($kriteria, "Luas Tanah");
+
+                    $rumah = $rumah->whereBetween("luas_tanah", [$split[0], $split[1]]);
+                }
             }
             if(!is_null($request->luas_bangunan))
             {
-                array_push($kriteria, "Luas Bangunan");
-
                 $luas = str_replace(".", "", $request->luas_bangunan);
                 $split = explode("-", $luas);
 
-                $rumah = $rumah->whereBetween("luas_bangunan", [$split[0], $split[1]]);
+                if($split[1] > 0)
+                {
+                    array_push($kriteria, "Luas Bangunan");
+
+                    $rumah = $rumah->whereBetween("luas_bangunan", [$split[0], $split[1]]);
+                }
             }
             if(!is_null($request->daya_listrik))
-            {
+            {   
                 array_push($kriteria, "Daya Listrik");
                 $rumah = $rumah->where("daya_listrik", "=", $request->daya_listrik);
             }
@@ -514,6 +531,8 @@ class MemberController extends Controller
                                         ->whereIn("kriteria_2", $kriteria_all)
                                         ->get();
 
+        // dd($rumah);
+
         /// KRITERIA
 
         $kriteria = AHP::getKriteriaFormat($nilai_kriteria);
@@ -532,7 +551,7 @@ class MemberController extends Controller
 
         /// RUMAH
 
-        $rumah = AHP::getRumahFormat($nilai_rumah, $kriteria_all);
+        $rumah = AHP::getRumahFormat($kriteria_all, $rumah);
 
         $rumah_list = AHP::getRumah($rumah[0]["matrix"]);
 

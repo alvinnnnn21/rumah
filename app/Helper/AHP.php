@@ -1,7 +1,8 @@
 <?php
 
-
 namespace App\Helper;
+
+use App\Models\Rumah;
 
 class AHP
 {           
@@ -106,23 +107,75 @@ class AHP
         return $kriteria_new;
     }
 
-    public static function getRumahFormat($nilai, $kriteria)
+    public static function getRumahFormat($kriteria, $rumah)
     {
         $rumah_new = [];
+
+        // dd($rumah);
+
+
 
         foreach($kriteria as $key => $k)
         {
             $rumah_new[$key]["kriteria"] = $k;
             $rumah_new[$key]["matrix"] = [];
 
-            foreach($nilai as $key1 => $n)
-            {   
-                if($n->kriteria == $k)
-                {   
-                    array_push($rumah_new[$key]["matrix"], ["k1" => $n->rumah_1, "k2" => $n->rumah_2, "nilai" => $n->nilai]);
+            foreach($rumah as $key1 => $r1)
+            {
+                foreach($rumah as $key2 => $r2)
+                {
+                    $nilai = "";
+ 
+                    if($r1->idrumah == $r2->idrumah)
+                    {   
+                        $nilai = 1;
+                    }
+                    else if($r1->idrumah != $r2->idrumah)
+                    {
+                        $rumah1 = Rumah::where("idrumah", $r1->idrumah)->first();
+                        $rumah2 = Rumah::where("idrumah", $r2->idrumah)->first();
+        
+                        if($k == "Carport")
+                        {   
+                            $nilai1 = ($rumah1->carport != "Tidak Ada") ? 3 : 5;
+                            $nilai2 = ($rumah1->carport != "Tidak Ada") ? 3 : 5;
+
+                            $nilai = $nilai1 / $nilai2;
+                        }
+                        else if($k == "Kitchen Set")
+                        {
+                            $nilai1 = ($rumah1->kitchen_set != "Tidak Ada") ? 3 : 5;
+                            $nilai2 = ($rumah1->kitchen_set != "Tidak Ada") ? 3 : 5;
+
+                            $nilai = $nilai1 / $nilai2;
+                        }
+                        else if($k == "Air Bersih")
+                        {   
+                            $nilai1 = 0;
+                            $nilai2 = 0;
+
+                            if($rumah1->air_bersih == "PDAM") $nilai1 = 7; 
+                            else if($rumah1->air_bersih == "Air Sumur") $nilai1 = 5;
+                            else if($rumah1->air_bersih == "Tidak Ada Air Bersih") $nilai1 = 3;
+                            
+                            if($rumah2->air_bersih == "PDAM") $nilai2 = 7; 
+                            else if($rumah2->air_bersih == "Air Sumur") $nilai2 = 5;
+                            else if($rumah2->air_bersih == "Tidak Ada Air Bersih") $nilai2 = 3;
+
+                            $nilai = $nilai1 / $nilai2;
+                        }
+                        else if($k == "Harga") $nilai = $rumah2->harga / $rumah1->harga;
+                        else if($k == "Jumlah Kamar") $nilai = $rumah1->jumlah_kamar / $rumah2->jumlah_kamar;
+                        else if($k == "Jumlah Kamar Mandi") $nilai = $rumah1->jumlah_kamar_mandi / $rumah2->jumlah_kamar_mandi;
+                        else if($k == "Luas Tanah") $nilai = $rumah1->luas_tanah / $rumah2->luas_tanah;
+                        else if($k == "Luas Bangunan") $nilai = $rumah1->luas_bangunan / $rumah2->luas_bangunan;
+                        else if($k == "Daya Listrik") $nilai = $rumah1->daya_listrik / $rumah2->daya_listrik;
+
+                    }
+
+                    array_push($rumah_new[$key]["matrix"], ["k1" => $r1->idrumah, "k2" => $r2->idrumah, "nilai" => $nilai]);
                 }
             }
-
         }   
 
         return $rumah_new;
@@ -365,7 +418,7 @@ class AHP
 
                 foreach($n1["matrix"] as $n2)
                 {
-                    if($n2["k2"] === $r)
+                    if($n2["k1"] === $r)
                     {   
                         $temp += $n2["nilai"];
                     }
@@ -405,7 +458,7 @@ class AHP
         {
             foreach($n1["matrix"] as $key1 => $n2)
             {   
-                $nilai[$key]["matrix"][$key1]["nilai"] = $n2["nilai"] / AHP::getPembagiRumah($total, $n2["k2"], $n1["kriteria"]);
+                $nilai[$key]["matrix"][$key1]["nilai"] = $n2["nilai"] / AHP::getPembagiRumah($total, $n2["k1"], $n1["kriteria"]);
             }
         }
 
@@ -422,7 +475,7 @@ class AHP
             {
                 foreach($n1["matrix"] as $n2)
                 {
-                    if($n2["k1"] === $rumah)
+                    if($n2["k2"] === $rumah)
                     {
                         $bobot += $n2["nilai"];
                     }

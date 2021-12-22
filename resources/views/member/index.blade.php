@@ -90,6 +90,7 @@
                         <div class="col-md-6 mt-4">
                             <label id="label-daya-listrik">Daya Listrik (VA)</label>
                             <select class="form-control" name="daya_listrik">
+                                <option value="">-</option>
                                 <option value="450">450 VA</option>
                                 <option value="900">900 VA</option>
                                 <option value="1300">1300 VA</option>
@@ -265,6 +266,8 @@
 
                     var html = "";
 
+                    html += "<option value=''>-</option>";
+
                     for(var i = 0; i < data1.length; i++)
                     {   
                         html += "<option value='" + data1[i].id + "'>" + data1[i].name + "</option>";
@@ -277,6 +280,8 @@
                         method: "get",
                         success: function(data2){
                             html = "";
+
+                            html += "<option value=''>-</option>";
 
                             for(var i = 0; i < data2.length; i++)
                             {
@@ -295,6 +300,8 @@
                         method: "get",
                         success: function(data2){
                             html = "";
+
+                            html += "<option value=''>-</option>";
 
                             for(var i = 0; i < data2.length; i++)
                             {
