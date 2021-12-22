@@ -46,8 +46,10 @@ class MemberController extends Controller
                 $rumah = Rumah::where("kota", $request->kota);
             }
             if(!is_null($request->provinsi))
-            {
-                $rumah = Rumah::where("provinsi", $request->provinsi);
+            {   
+                $provinsi = explode("-", $request->provinsi);
+                
+                $rumah = Rumah::where("provinsi", $provinsi[1]);
             }
             if(!is_null($request->alamat))
             {
@@ -114,6 +116,8 @@ class MemberController extends Controller
             else if(!isset($request->kitchen_set)) $rumah = $rumah->where("kitchen_set", "Tidak Ada");
 
             $rumah = $rumah->get();
+
+            dd($rumah);
 
             if(count($rumah) == 0)
             {

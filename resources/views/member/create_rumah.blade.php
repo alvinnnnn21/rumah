@@ -150,6 +150,8 @@
 
                 var id = $(this).val().split("-");
 
+                console.log(id);
+
                 $.ajax({
                         url: "http://www.emsifa.com/api-wilayah-indonesia/api/regencies/" + id[0] + ".json",
                         method: "get",
