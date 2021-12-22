@@ -230,7 +230,7 @@
             });
 
             luas_bangunan.noUiSlider.on("update", function(values, handle){
-                $("#label-luas-bangunan").html("Luas Tanah " + values[0] + "m<sup>2</sup> - " + values[1] + "m<sup>2</sup>");
+                $("#label-luas-bangunan").html("Luas Bangunan " + values[0] + "m<sup>2</sup> - " + values[1] + "m<sup>2</sup>");
                 $("input[name=luas_bangunan]").val(values[0] + "-" + values[1]);
             });
 

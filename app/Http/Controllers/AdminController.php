@@ -144,22 +144,6 @@ class AdminController extends Controller
                 ]);
             }
         }
-
-        foreach($kriteria as $key => $k)
-        {
-            foreach($rumah as $key1 => $r1)
-            {
-                foreach($rumah as $key2 => $r2)
-                {
-                    NilaiRumah::create([
-                        "rumah_1" => $r1->idrumah,
-                        "rumah_2" => $r2->idrumah,
-                        "kriteria" => $k,
-                        "nilai" => $request->input("kriteria-" . $key . "-rumah-" . $r1->idrumah . "-" . $r2->idrumah)
-                    ]);
-                }
-            }
-        }
     
         return redirect()->back()->with(["message" => "Berhasil Menyimpan Nilai Perbandingan", "status" => "success"]); 
     }
