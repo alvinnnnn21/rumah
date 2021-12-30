@@ -598,15 +598,17 @@ class MemberController extends Controller
             return $b['nilai'] <=> $a['nilai'];
         });
 
-        $rumah = [];
+        $hasil = [];
 
         foreach($nilai_final as $n)
         {
-            array_push($rumah, $n["rumah"]);
+            $rumah = Rumah::with(["gambar", "pemilik"])->where("idrumah", $n["rumah"])->first();
+
+            array_push($hasil, $rumah);
         }   
 
         return view("member.hasil")->with([
-            "rumah" => Rumah::whereIn("idrumah", $rumah)->get()
+            "rumah" => $hasil
         ]);
     }
 
