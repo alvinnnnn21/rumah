@@ -117,18 +117,28 @@ class MemberController extends Controller
 
             $rumah = $rumah->get();
 
-            dd($rumah);
-
             if(count($rumah) == 0)
             {
                 return redirect()->back()->with(["message" => "Rumah dengan kriteria yang dicari tidak ditemukan", "status" => "info"]);
             }
 
-            $hasil = $this->storeAHP($rumah, $kriteria);
+            $nilai_kriteria = NilaiKriteria::whereIn("kriteria_1", $kriteria)
+                                            ->whereIn("kriteria_2", $kriteria)
+                                            ->get();
 
-            return view("member.hasil")->with([
-                "rumah" => $hasil
+            // dd($kriteria);
+
+            return view("member.perbandingan")->with([
+                "rumah" => $rumah,
+                "kriteria" => $kriteria,
+                "nilai_kriteria" => $nilai_kriteria
             ]);
+
+            // $hasil = $this->storeAHP($rumah, $kriteria);
+
+            // return view("member.hasil")->with([
+            //     "rumah" => $hasil
+            // ]);
         }
     }
 
@@ -357,7 +367,7 @@ class MemberController extends Controller
             "carport" => $request->carport,
             "kitchen_set" =>  $request->kitchen_set,
             "id_pemilik" => Auth::user()->iduser,
-            "status" => "Kosong"
+            "status" => "Proses"
         ]);
 
         for($i = 0; $i < count($request->file("gambar")); $i++)
@@ -523,23 +533,34 @@ class MemberController extends Controller
         ]);
     }
 
-    public function storeAHP($rumah, $kriteria_all)
-    {   
-        $id = $rumah->pluck("idrumah")->toArray();
+    public function storeAHP(Request $request)
+    {           
+        $rumah = json_decode($request->rumah);
+        $kriteria_all = json_decode($request->kriteria);
+
+        $nilai_kriteria_new = [];
+
+        foreach($request->except(["kriteria", "rumah", "_token"]) as $key => $r)
+        {   
+            $id = explode("-", $key);
+
+            array_push($nilai_kriteria_new, ["nilai" => $r, "kriteria_1" => $id[1], "kriteria_2" => $id[2]]);
+        }
+
+        $id = [];
+
+        foreach($rumah as $r)
+        {
+            array_push($id, $r->idrumah);
+        }
 
         $nilai_rumah = NilaiRumah::whereIn("rumah_1", $id)
                                 ->whereIn("rumah_2", $id)
                                 ->get();
-    
-        $nilai_kriteria = NilaiKriteria::whereIn("kriteria_1", $kriteria_all)
-                                        ->whereIn("kriteria_2", $kriteria_all)
-                                        ->get();
-
-        // dd($rumah);
 
         /// KRITERIA
 
-        $kriteria = AHP::getKriteriaFormat($nilai_kriteria);
+        $kriteria = AHP::getKriteriaFormat($nilai_kriteria_new);
 
         $kriteria_list = AHP::getKriteria($kriteria);
 
@@ -582,9 +603,11 @@ class MemberController extends Controller
         foreach($nilai_final as $n)
         {
             array_push($rumah, $n["rumah"]);
-        }
+        }   
 
-        return Rumah::whereIn("idrumah", $rumah)->get();
+        return view("member.hasil")->with([
+            "rumah" => Rumah::whereIn("idrumah", $rumah)->get()
+        ]);
     }
 
     public function storeSearch(Request $request)
@@ -766,8 +789,8 @@ class MemberController extends Controller
         return response()->json(["status" => "200", "html" => $html, "modal" => $modal]);
     }
 
-    public function getTutorial()
-    {
+    public function getTutorial()       
+    {   
         return view("member.tutorial");
     }
 }

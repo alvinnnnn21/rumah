@@ -10,7 +10,7 @@
                     <h4>Kriteria</h4>
                 </div>
             </div>
-            <div class="row mt-2">
+            <div class="row mt-4">
                 <div class="col-md-12">
                     <table class="table text-center">
                         <tbody>

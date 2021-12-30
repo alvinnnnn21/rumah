@@ -23,6 +23,7 @@ Route::group(["middleware" => "auth:admin"], function(){
     Route::get("/kriteria", [AdminController::class, "getKriteria"]);
     
     Route::put("/bukti/{id}", [AdminController::class, "updateBukti"]);
+    Route::put("/konfirmasi/{id}", [AdminController::class, "updateKonfirmasi"]);
 
     Route::delete("/user/{id}", [AdminController::class, "destroyUser"]);
     Route::delete("/rumah/{id}", [AdminController::class, "destroyRumah"]);
@@ -52,6 +53,7 @@ Route::group(["middleware" => "auth:member"], function(){
     Route::post("/favorite", [MemberController::class, "storeFavorite"]);
     Route::post("/sewa", [MemberController::class, "storeSewa"]);
     Route::post("/bukti", [MemberController::class, "storeBukti"]);
+    Route::post("/ahp", [MemberController::class, "storeAHP"]);
 
     Route::put("/akun", [MemberController::class, "updateAkun"]);
     Route::put("/reminder/{id}", [MemberController::class, "updateReminder"]);

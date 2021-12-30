@@ -15,6 +15,8 @@ use App\Models\Gambar;
 use App\Models\TransaksiSewa;
 use App\Models\BuktiBayar;
 use App\Models\Notifikasi;
+use App\Models\NilaiKriteria;
+use App\Models\NilaiRumah;
 
 use Validator;
 use Auth;
@@ -238,7 +240,6 @@ class APIController extends Controller
     public function createRumah(Request $request)
     {           
         $rules = [
-            "judul" => "required|max:128",
             "alamat" => "required|max:45",
             "keterangan" => "required",
             "harga" => "required",
@@ -246,11 +247,12 @@ class APIController extends Controller
             "luas_bangunan" => "required",
             "jumlah_kamar" => "required",
             "jumlah_kamar_mandi" => "required",
-            "daya_listrik" => "required"
+            "daya_listrik" => "required",
+            "provinsi" => "required",
+            "kota" => "required"
         ];
 
         $messages = [
-            "judul.required" => "Judul tidak boleh kosong",
             "judul.max" => "Judul tidak boleh lebih dari 128 karakter",
             "alamat.required" => "Alamat tidak boleh kosong",
             "alamat.max" => "Alamat tidak boleh lebih dari 45 karakter",
@@ -260,7 +262,9 @@ class APIController extends Controller
             "luas_bangungan.required" => "Luas Bangunan tidak boleh kosong",
             "jumlah_kamar.required" => "Jumlah Kamar tidak boleh kosong",
             "jumlah_kamar_mandi.required" => "Jumlah Kamar Mandi tidak boleh kosong",
-            "daya_listrik" => "Daya Listrik tidak boleh kosong"
+            "daya_listrik.required" => "Daya Listrik tidak boleh kosong",
+            "provinsi.required" => "Provinsi tidak boleh kosong",
+            "kota.required" => "Kota tidak boleh kosong"
         ];
 
         $validator = Validator::make($request->except(["role"]), $rules, $messages);
@@ -284,6 +288,9 @@ class APIController extends Controller
             "id_pemilik" => $request->pemilik,
             "keterangan" => $request->keterangan,
             "daya_listrik" => $request->daya_listrik,
+            "provinsi" => $request->provinsi,
+            "kota" => $request->kota,
+            "status" => "Proses"
         ]);
 
         for($i = 0; $i <= $request->count; $i++) 
@@ -470,7 +477,6 @@ class APIController extends Controller
         }
 
         Rumah::where("idrumah", $id)->update([
-            "judul" => $request->judul,
             "alamat" => $request->alamat,
             "luas_bangunan" => $request->luas_bangunan,
             "luas_tanah" => $request->luas_tanah,
@@ -482,6 +488,8 @@ class APIController extends Controller
             "harga" => $request->harga,
             "keterangan" => $request->keterangan,
             "daya_listrik" => $request->daya_listrik,
+            "kota" => $request->kota,
+            "provinsi" => $request->provinsi
         ]);
 
         return response()->json(["status" => "200", "message" => "Berhasil mengedit rumah"]);
@@ -550,65 +558,97 @@ class APIController extends Controller
 
     public function createPerbandingan(Request $request)
     {
-        $kriteria = ["Air Bersih", "Kitchen Set", "Carport"];
+        $kriteria = ["Carport", "Kitchen Set", "Air Bersih"];
 
         $rumah = Rumah::where("status", "Kosong");
 
         if(strlen($request->keyword) > 0)
         {
-            $rumah = $rumah->where("judul", "LIKE %" . $request->keyword . " %")
-                            ->orWhere("alamat", "LIKE %" . $request->keyword . " %");
-        }
-
-        if($request->daya_listrik_akhir > 0 || $request->daya_listrik_awal > 0)
-        {   
-            $rumah->whereBetween("daya_listrik", [$request->daya_listrik_awal, $request->daya_listrik_akhir]);
-            array_push($kriteria, "Daya Listrik");
+            $rumah = $rumah->where("alamat", "LIKE %" . $request->keyword . " %");
         }
         if($request->harga_akhir > 0 || $request->harga_awal > 0)
         {
-            $rumah->whereBetween("harga", [$request->harga_awal, $request->harga_akhir]);
+            $rumah = $rumah->whereBetween("harga", [$request->harga_awal, $request->harga_akhir]);
             array_push($kriteria, "Harga");
+        }
+        if(!is_null($request->jumlah_kamar))
+        {
+            $rumah = $rumah->where("jumlah_kamar", $request->jumlah_kamar);
+            array_push($kriteria, "Jumlah Kamar");
+        }
+        if(!is_null($request->jumlah_kamar_mandi))
+        {
+            $rumah = $rumah->where("jumlah_kamar_mandi", "=", $request->jumlah_kamar_mandi);
+            array_push($kriteria, "Jumlah Kamar Mandi");
         }
         if($request->luas_tanah_akhir > 0 || $request->luas_tanah_awal > 0)
         {
-            $rumah->whereBetween("luas_tanah", [$request->luas_tanah_awal, $request->luas_tanah_akhir]);
+            $rumah = $rumah->whereBetween("luas_tanah", [$request->luas_tanah_awal, $request->luas_tanah_akhir]);
             array_push($kriteria, "Luas Tanah");
         }
         if($request->luas_bangunan_akhir > 0 || $request->luas_bangunan_awal > 0)
         {
-            $rumah->whereBetween("luas_bangunan", [$request->luas_bangunan_awal, $request->luas_bangunan_akhir]);
+            $rumah = $rumah->whereBetween("luas_bangunan", [$request->luas_bangunan_awal, $request->luas_bangunan_akhir]);
             array_push($kriteria, "Luas Bangunan");
         }
-        if($request->jumlah_kamar > 0)
-        {
-            $rumah->whereBetween("jumlah_kamar", [0, $request->jumlah_kamar]);
-            array_push($kriteria, "Jumlah Kamar");
+        if(!is_null($request->daya_listrik))
+        {   
+            $rumah = $rumah->where("daya_listrik", $request->daya_listrik);
+            array_push($kriteria, "Daya Listrik");
         }
-        if($request->jumlah_kamar_mandi > 0)
+        
+        if(!is_null($request->provinsi))
         {
-            $rumah->whereBetween("jumlah_kamar_mandi", [0, $request->jumlah_kamar_mandi]);
-            array_push($kriteria, "Jumlah Kamar Mandi");
+            $rumah = $rumah->where("provinsi", $request->provinsi);
+        }
+        if(!is_null($request->kota))
+        {
+            $rumah = $rumah->where("kota", $request->kota);
         }
 
-        $rumah->where("air_bersih", ($request->air_bersih === true) ? "Ada" : "Tidak Ada");
-        $rumah->where("kitchen_set", ($request->kitchen_set === true) ? "Ada" : "Tidak Ada");
+        $rumah->where("air_bersih", $request->air_bersih);
         $rumah->where("carport", ($request->carport === true) ? "Ada" : "Tidak Ada");
+        $rumah->where("kitchen_set", ($request->kitchen_set === true) ? "Ada" : "Tidak Ada");
 
         $rumah = $rumah->get();
 
-        $perbandingan_kriteria = AHP::getPairWiseMatrixKriteria($kriteria);
+        if(count($rumah) > 0)
+        {
+            $perbandingan_kriteria = AHP::getPairWiseMatrixKriteria($kriteria);
+            $nilai_kriteria = NilaiKriteria::whereIn("kriteria_1", $kriteria)       
+                                            ->whereIn("kriteria_2", $kriteria) 
+                                            ->get();
 
-        $perbandingan_rumah = AHP::getPairWiseMatrixRumah($rumah, $kriteria);
+            return response()->json(["status" => "200", "data" => ["rumah" => $rumah, "kriteria" => $perbandingan_kriteria, "nilai" => $nilai_kriteria]]);
+        }
 
-        return response()->json(["status" => "200", "data" => ["kriteria" => $perbandingan_kriteria, "rumah" => $perbandingan_rumah]]);
+        return response()->json(["status" => "404"]);
     }
 
     public function createAHP(Request $request)
-    {
-        /// KRITERIA
-
+    {   
+        $rumah = $request->rumah;
         $kriteria = $request->kriteria;
+
+        $nilai_kriteria_new = [];
+
+        foreach($kriteria as $k)
+        {
+            array_push($nilai_kriteria_new, ["nilai" => $k["nilai"], "kriteria_1" => $k["k1"], "kriteria_2" => $k["k2"]]);
+        }
+
+        $id = [];
+
+        foreach($rumah as $r)
+        {
+            array_push($id, $r["idrumah"]);
+        }
+
+        $nilai_rumah = NilaiRumah::whereIn("rumah_1", $id)
+                                ->whereIn("rumah_2", $id)
+                                ->get();
+
+        /// KRITERIA
 
         $kriteria_list = AHP::getKriteria($kriteria);
 
@@ -624,7 +664,9 @@ class APIController extends Controller
 
         /// RUMAH
 
-        $rumah = $request->rumah;
+        $rumah = Rumah::whereIn("idrumah", $id)->get();
+
+        $rumah = AHP::getRumahFormat($kriteria_list, $rumah);
 
         $rumah_list = AHP::getRumah($rumah[0]["matrix"]);
 

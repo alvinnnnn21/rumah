@@ -41,17 +41,18 @@ class AHP
         $done = [];
         $perbandingan_kriteria = [];
 
-        foreach($kriteria as $s1)
+        foreach($kriteria as $key1 => $s1)
         {   
-            foreach($kriteria as $s2)
+            foreach($kriteria as $key2 => $s2)
             {   
-                if(!in_array($s2, $done))
-                {   
-                    if($s1 !== $s2)
-                    {
-                        array_push($perbandingan_kriteria, ["k1" => $s1, "k2" => $s2]);
-                    }
-                } 
+                if($s1 !== $s2 && $key1 < $key2)
+                {
+                    array_push($perbandingan_kriteria, ["k1" => $s1, "k2" => $s2, "key1" => $key1, "key2" => $key2]);
+                }
+                // if(!in_array($s2, $done))
+                // {   
+                    
+                // } 
             }
 
             array_push($done, $s1);
@@ -101,7 +102,7 @@ class AHP
 
         foreach($nilai as $key => $n)
         {   
-            array_push($kriteria_new, ["k1" => $n->kriteria_1, "k2" => $n->kriteria_2, "nilai" => $n->nilai]);
+            array_push($kriteria_new, ["k1" => $n["kriteria_1"], "k2" => $n["kriteria_2"], "nilai" => $n["nilai"]]);
         }
 
         return $kriteria_new;
@@ -110,10 +111,6 @@ class AHP
     public static function getRumahFormat($kriteria, $rumah)
     {
         $rumah_new = [];
-
-        // dd($rumah);
-
-
 
         foreach($kriteria as $key => $k)
         {
@@ -232,13 +229,12 @@ class AHP
     {
         foreach($kriteria as $key => $k)
         {
-
             if($k["k1"] === $k["k2"])
             {
                 $kriteria[$key]["nilai"] = 1;
             }
             else
-            {
+            {   
                 if(AHP::getNilaiKriteria($nilai, $k["k1"], $k["k2"]))
                 {
                     $kriteria[$key]["nilai"] = AHP::getNilaiKriteria($nilai, $k["k1"], $k["k2"]);

@@ -147,4 +147,36 @@ class AdminController extends Controller
     
         return redirect()->back()->with(["message" => "Berhasil Menyimpan Nilai Perbandingan", "status" => "success"]); 
     }
+
+    public function updateKonfirmasi(Request $request, $id)
+    {   
+        $rumah = Rumah::where("idrumah", $id)->first();
+
+        if($request->status == "Setuju")
+        {
+            Rumah::where("idrumah", $id)->update([
+                "status" => "Kosong",
+            ]);
+        }
+        else
+        {
+            Rumah::where("idrumah", $id)->update([
+                "status" => "Ditolak",
+                "alasan_tolak" => $request->alasan
+            ]);
+        }
+
+        $notifikasi = [
+            "type" => "Konfirmasi Rumah", 
+            "status" => $request->status, 
+            "message" => ($request->status === "Setuju") ? "Proses penambahan rumah disetujui" : "Proses penambahan rumah ditolak, karena " . $request->alasan,
+        ];
+
+        Notifikasi::create([
+            "idpenerima" => $rumah->id_pemilik,
+            "notifikasi" => json_encode($notifikasi),
+        ]);
+        
+        return response()->json(["message" => "Berhasil konfirmasi rumah", "status" => "success"]);
+    }
 }

@@ -28,7 +28,8 @@ class Rumah extends Model
         "air_bersih",
         "carport",
         "kitchen_set",
-        "status"
+        "status",
+        "alasan_tolak"
     ];
 
     public function favorite()

@@ -28,8 +28,8 @@
                                 @if($r->status == "Proses")
                                     <td>
                                         <div class="btn-group">
-                                            <button class="btn btn-success">Setuju</button>
-                                            <button class="btn btn-danger">Tolak</button>
+                                            <button data-id="{{ $r->idrumah }}" status="Proses" class="btn btn-success btn-konfirmasi">Setuju</button>
+                                            <button data-id="{{ $r->idrumah }}" status="Tolak" class="btn btn-danger btn-konfirmasi">Tolak</button>
                                         </div>
                                     </td>
                                 @else
@@ -68,6 +68,35 @@
                         $("#form-delete-" + $(this).attr("data-id")).submit();
                     }
                 })
+            });
+
+            $(document).on("click", "button.btn-konfirmasi", function(){
+
+                var alasan = "";
+                var status = $(this).attr("status");
+
+                if(status === "Tolak")
+                {
+                    alasan = prompt("Alasan penolakan...");
+                }
+
+                $.ajax({
+                    url: "{{ url('/konfirmasi') }}" + "/" + $(this).attr("data-id"),
+                    method: "post",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        _method: "put",
+                        status,
+                        alasan
+                    },
+                    success: function(data){
+                        Swal.fire({
+                            icon: data.status,
+                            html: "<b>" + data.message + "</b>",
+                        });
+                    }
+                })
+
             });
         </script>
 

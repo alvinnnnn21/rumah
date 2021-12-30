@@ -23,65 +23,51 @@
             <hr>
             <div class="row mt-4">
                 <div class="col-md-12">
-                    <table class="table table-borderless text-center">
+                    <table class="table text-center">
                         <tbody>
-                            @foreach($kriteria as $key => $k)
+                            <tr>
+                                <th style="width: 100px;">Kriteria</th>
+                                @foreach($kriteria as $k)
+                                    <th style="width: 100px;">{{ $k }}</th>
+                                @endforeach
+                            </tr>   
+                            @foreach($kriteria as $key1 => $k1)
                                 <tr>
-                                    <td colspan="3">
-                                        <h5 id="kriteria-{{ $key }}">1</h5>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-left h5">{{ $k["k1"] }}</td>
-                                    <td>
-                                        <input class="form-control range" name="kriteria-{{ $key }}" value="1" data-id="kriteria-{{ $key }}" type="range" min="1" max="9">
-                                    </td>
-                                    <td class="text-right h5">{{ $k["k2"] }}</td>
-                                </tr>
+                                    @foreach($kriteria as $key2 => $k2)
+                                        @if($key2 == 0)
+                                            <td>
+                                                {{ $k1 }}
+                                            </td>
+                                        @endif
+                                        @if($key1 == $key2)
+                                            <td class="bg-secondary text-light">
+                                                1
+                                                <input type="hidden" name="kriteria-{{ $k1 }}-{{ $k2 }}" value="9">
+                                            </td>
+                                        @else
+                                            <td style="width: 100px;">
+                                                @if($key1 < $key2)
+                                                    <select id="kriteria-{{ $key1 }}-{{ $key2 }}" name="kriteria-{{ $k1 }}-{{ $k2 }}" class="form-control select-kriteria">
+                                                        @for($i = 1; $i < 10; $i++)
+                                                            <option {{ (AHP::cariNilaiKriteria($nilai_kriteria, $k1, $k2) == $i) ? 'selected' : ''}} value={{$i}}>{{ $i }}</option>
+                                                        @endfor
+                                                    </select>
+                                                @else
+                                                    <input class="form-control" value="{{ (AHP::cariNilaiKriteria($nilai_kriteria, $k1, $k2)) ? AHP::cariNilaiKriteria($nilai_kriteria, $k1, $k2) : 1 }}" type="text" id="kriteria-{{ $key1 }}-{{ $key2 }}" name="kriteria-{{ $k1 }}-{{ $k2 }}" readonly>
+                                                @endif  
+                                            </td>
+                                        @endif
+                                    @endforeach
+                                    </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="row mt-5">
-                <div class="col-md-12 text-center">
-                    <h4>Perbandingan Rumah</h4>
-                </div>
-            </div>
-            <hr>
-            @foreach($rumah as $key => $r1)
-                <div class="row mt-5">
-                    <div class="col-md-12 text-center">
-                        <h4>{{ $r1["kriteria"] }}</h4>
-                    </div>
-                </div>
-                <div class="row mt-4">
-                    <div class="col-md-12">
-                        <table class="table table-borderless text-center">
-                            <tbody>
-                                @foreach($r1["matrix"] as $key1 => $r2)
-                                    <tr>
-                                        <td colspan="3">
-                                            <h5 id="rumah-{{ $key }}-{{ $r2["k1"] . "-" . $r2["k2"] }}">1</h5>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-left h5">Rumah {{ $r2["k1"] }}</td>
-                                        <td>
-                                            <input class="form-control range" name="rumah-{{ $key . "-" . $key1 }}" value="1" data-id="rumah-{{ $key }}-{{ $r2["k1"] . "-" . $r2["k2"] }}" type="range" min="1" max="9">
-                                        </td>
-                                        <td class="text-right h5">Rumah {{ $r2["k2"] }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            @endforeach
             <div class="row mt-3 mb-3">
                 <div class="col-md-12 text-center">
                     <button type="submit" class="btn btn-secondary w-25">
-                        CARI
+                        Bandingkan
                     </button>
                 </div>
             </div>
@@ -93,6 +79,18 @@
             $(".range").change(function(){
                 $("#" + $(this).attr("data-id")).html($(this).val());
             });
+
+            var kriteria = {!! json_encode($kriteria) !!};
+            var rumah = {!! json_encode($rumah) !!};
+
+            $(document).on("change", "select.select-kriteria", function(){
+                var id = $(this).attr("id");
+                id = id.split("-");
+
+                $("#kriteria-" + id[2] + "-" + id[1]).val(1 / parseInt($(this).val()));
+            });
         </script>
     @endpush
+
+    
 @endsection
