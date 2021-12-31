@@ -114,116 +114,120 @@
                     @endif
                 @endif
                 <hr>
-                <div class="d-flex justify-content-around pt-2">
-                    @if($owner)
-                        <span>
-                            <i class="fas fa-bed"></i>
-                            <input type="number" name="jumlah_kamar" class="form-contorl w-50"  value="{{ $rumah->jumlah_kamar }}" required>
-                            <p class="text-secondary">Kamar</p>
-                        </span>
-                        <span class="ml-5">
-                            <i class="fas fa-shower"></i>
-                            <input type="number" name="jumlah_kamar_mandi" class="form-contorl w-50"  value="{{ $rumah->jumlah_kamar_mandi }}" required>
-                            <p class="text-secondary">Kamar Mandi</p>
-                        </span>
-                        <span class="ml-5">
-                            <i class="fas fa-home"></i>
-                            <input type="number" name="luas_bangunan" class="form-contorl w-50"  value="{{ $rumah->luas_bangunan }}" required>
-                            <p class="text-secondary">Bangunan</p>
-                        </span>
-                        <span class="ml-5">
-                            <i class="fas fa-expand-arrows-alt"></i>
-                            <input type="number" name="luas_tanah" class="form-contorl w-50"  value="{{ $rumah->luas_tanah }}" required>
-                            <p class="text-secondary">Tanah</p>
-                        </span>
-                    @else
-                        <span>
-                            <i class="fas fa-bed"></i>
-                            {{ $rumah->jumlah_kamar }}
-                            <p class="text-secondary">Kamar</p>
-                        </span>
-                        <span class="ml-5">
-                            <i class="fas fa-shower"></i>
-                            {{ $rumah->jumlah_kamar_mandi }}
-                            <p class="text-secondary">Kamar Mandi</p>
-                        </span>
-                        <span class="ml-5">
-                            <i class="fas fa-home"></i>
-                            {{ $rumah->luas_bangunan }} m<sup>2</sup>
-                            <p class="text-secondary">Bangunan</p>
-                        </span>
-                        <span class="ml-5">
-                            <i class="fas fa-expand-arrows-alt"></i>
-                            {{ $rumah->luas_bangunan }} m<sup>2</sup>
-                            <p class="text-secondary">Tanah</p>
-                        </span>
-                    @endif
+                <div class="d-flex justify-content-center">
+                    <div class="d-flex justify-content-around pt-2 w-75">
+                        @if($owner)
+                            <span>
+                                <i class="fas fa-bed"></i>
+                                <input type="number" name="jumlah_kamar" class="form-contorl w-50"  value="{{ $rumah->jumlah_kamar }}" required>
+                                <p class="text-secondary">Kamar</p>
+                            </span>
+                            <span class="ml-5">
+                                <i class="fas fa-shower"></i>
+                                <input type="number" name="jumlah_kamar_mandi" class="form-contorl w-50"  value="{{ $rumah->jumlah_kamar_mandi }}" required>
+                                <p class="text-secondary">Kamar Mandi</p>
+                            </span>
+                            <span class="ml-5">
+                                <i class="fas fa-home"></i>
+                                <input type="number" name="luas_bangunan" class="form-contorl w-50"  value="{{ $rumah->luas_bangunan }}" required>
+                                <p class="text-secondary">Bangunan</p>
+                            </span>
+                            <span class="ml-5">
+                                <i class="fas fa-expand-arrows-alt"></i>
+                                <input type="number" name="luas_tanah" class="form-contorl w-50"  value="{{ $rumah->luas_tanah }}" required>
+                                <p class="text-secondary">Tanah</p>
+                            </span>
+                        @else
+                            <span>
+                                <i class="fas fa-bed"></i>
+                                {{ $rumah->jumlah_kamar }}
+                                <p class="text-secondary">Kamar</p>
+                            </span>
+                            <span class="ml-5">
+                                <i class="fas fa-shower"></i>
+                                {{ $rumah->jumlah_kamar_mandi }}
+                                <p class="text-secondary">Kamar Mandi</p>
+                            </span>
+                            <span class="ml-5">
+                                <i class="fas fa-home"></i>
+                                {{ $rumah->luas_bangunan }} m<sup>2</sup>
+                                <p class="text-secondary">Bangunan</p>
+                            </span>
+                            <span class="ml-5">
+                                <i class="fas fa-expand-arrows-alt"></i>
+                                {{ $rumah->luas_bangunan }} m<sup>2</sup>
+                                <p class="text-secondary">Tanah</p>
+                            </span>
+                        @endif
+                    </div>
                 </div>
                 <hr>
-                <div>
-                    <h4 class="mb-5 mt-2">Informasi Detail Rumah</h4>
-                    @if($owner)
-                        <label>Alamat</label>
-                        <input type="text" name="alamat" class="form-control" value="{{ $rumah->alamat }}" required> 
-                        <hr>
-                        <label>Harga</label>
-                        <input type="number" name="harga" class="form-control" value="{{ $rumah->harga }}" required> 
-                        <hr>
-                        <label>Keterangan</label>
-                        <textarea name="keterangan" class="form-control" required>{{ $rumah->keterangan }}</textarea>
-                        <hr>
-                        <label>Air Bersih</label>
-                        <select class="form-control w-25" name="air_bersih">
-                            <option {{($rumah->air_bersih == "Tidak Ada") ? "selected" : ""}} value="Tidak Ada">Tidak Ada</option>
-                            <option {{($rumah->air_bersih == "Ada") ? "selected" : ""}} value="Ada">Ada</option>
-                        </select>
-                        <hr>
-                        <label>Carport</label>
-                        <select class="form-control w-25" name="car_port">
-                            <option {{($rumah->carport == "Tidak Ada") ? "selected" : ""}} value="Tidak Ada">Tidak Ada</option>
-                            <option {{($rumah->carport == "Ada") ? "selected" : ""}} value="Ada">Ada</option>
-                        </select>
-                        <hr>
-                        <label>Kitchen Set</label>
-                        <select class="form-control w-25" name="kitchen_set">
-                            <option {{($rumah->kitchen_set == "Tidak Ada") ? "selected" : ""}} value="Tidak Ada">Tidak Ada</option>
-                            <option {{($rumah->kitchen_set == "Ada") ? "selected" : ""}} value="Ada">Ada</option>
-                        </select>
-                        <hr>
-                        <label>Daya Listrik</label>
-                        <input type="number" name="daya_listrik" class="form-control" value="{{ $rumah->daya_listrik }}" required> 
-                        <hr>
-                        <label>Gambar</label>
-                        <br>
-                        <input type="file" name="gambar[]" accept="image/*" multiple>
-                        <hr>
-                    @else
-                        <label class="text-secondary label">Alamat</label>
-                        <p class="h6">
-                            {{ $rumah->alamat }}
-                        </p>
-                        <hr>
-                        <label class="text-secondary label">Harga</label>
-                        <p class="h6">
-                            Rp {{ number_format($rumah->harga, 2, ',', '.') }} / tahun
-                        </p>
-                        <hr>
-                        <label class="text-secondary label">Keterangan</label>
-                        <p class="h6">
-                            {{ $rumah->keterangan }}
-                        </p>
-                        <hr>
-                        <label class="text-secondary label">Fasilitas</label>
-                        <p class="h6">
-                            {{ implode(" | ", $fasilitas) }}
-                        </p>
-                        <hr>
-                        <label class="text-secondary label">Daya Listrik</label>
-                        <p class="h6">
-                            {{ $rumah->daya_listrik }}
-                        </p>
-                        <hr>
-                    @endif  
+                <div class="d-flex justify-content-center">
+                    <div class="w-50">
+                        <h4 class="mb-5 mt-2">Informasi Detail Rumah</h4>
+                        @if($owner)
+                            <label>Alamat</label>
+                            <input type="text" name="alamat" class="form-control" value="{{ $rumah->alamat }}" required> 
+                            <hr>
+                            <label>Harga</label>
+                            <input type="number" name="harga" class="form-control" value="{{ $rumah->harga }}" required> 
+                            <hr>
+                            <label>Keterangan</label>
+                            <textarea name="keterangan" class="form-control" required>{{ $rumah->keterangan }}</textarea>
+                            <hr>
+                            <label>Air Bersih</label>
+                            <select class="form-control w-25" name="air_bersih">
+                                <option {{($rumah->air_bersih == "Tidak Ada") ? "selected" : ""}} value="Tidak Ada">Tidak Ada</option>
+                                <option {{($rumah->air_bersih == "Ada") ? "selected" : ""}} value="Ada">Ada</option>
+                            </select>
+                            <hr>
+                            <label>Carport</label>
+                            <select class="form-control w-25" name="car_port">
+                                <option {{($rumah->carport == "Tidak Ada") ? "selected" : ""}} value="Tidak Ada">Tidak Ada</option>
+                                <option {{($rumah->carport == "Ada") ? "selected" : ""}} value="Ada">Ada</option>
+                            </select>
+                            <hr>
+                            <label>Kitchen Set</label>
+                            <select class="form-control w-25" name="kitchen_set">
+                                <option {{($rumah->kitchen_set == "Tidak Ada") ? "selected" : ""}} value="Tidak Ada">Tidak Ada</option>
+                                <option {{($rumah->kitchen_set == "Ada") ? "selected" : ""}} value="Ada">Ada</option>
+                            </select>
+                            <hr>
+                            <label>Daya Listrik</label>
+                            <input type="number" name="daya_listrik" class="form-control" value="{{ $rumah->daya_listrik }}" required> 
+                            <hr>
+                            <label>Gambar</label>
+                            <br>
+                            <input type="file" name="gambar[]" accept="image/*" multiple>
+                            <hr>
+                        @else
+                            <label class="text-secondary label">Alamat</label>
+                            <p class="h6">
+                                {{ $rumah->alamat }}
+                            </p>
+                            <hr>
+                            <label class="text-secondary label">Harga</label>
+                            <p class="h6">
+                                Rp {{ number_format($rumah->harga, 2, ',', '.') }} / tahun
+                            </p>
+                            <hr>
+                            <label class="text-secondary label">Keterangan</label>
+                            <p class="h6">
+                                {{ $rumah->keterangan }}
+                            </p>
+                            <hr>
+                            <label class="text-secondary label">Fasilitas</label>
+                            <p class="h6">
+                                {{ implode(" | ", $fasilitas) }}
+                            </p>
+                            <hr>
+                            <label class="text-secondary label">Daya Listrik</label>
+                            <p class="h6">
+                                {{ $rumah->daya_listrik }}
+                            </p>
+                            <hr>
+                        @endif  
+                    </div>
                 </div>
             </div>
            

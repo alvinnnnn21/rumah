@@ -126,19 +126,14 @@ class MemberController extends Controller
                                             ->whereIn("kriteria_2", $kriteria)
                                             ->get();
 
-            // dd($kriteria);
+            $nilai = [0.11111111111111, 0.125, 0.14285714285714, 0.16666666666667, 0.2, 0.25, 0.33333333333333, 0.5];
 
             return view("member.perbandingan")->with([
                 "rumah" => $rumah,
                 "kriteria" => $kriteria,
-                "nilai_kriteria" => $nilai_kriteria
+                "nilai_kriteria" => $nilai_kriteria,
+                "nilai" => $nilai
             ]);
-
-            // $hasil = $this->storeAHP($rumah, $kriteria);
-
-            // return view("member.hasil")->with([
-            //     "rumah" => $hasil
-            // ]);
         }
     }
 

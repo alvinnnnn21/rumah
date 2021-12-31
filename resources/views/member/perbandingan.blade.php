@@ -48,6 +48,9 @@
                                             <td style="width: 100px;">
                                                 @if($key1 < $key2)
                                                     <select id="kriteria-{{ $key1 }}-{{ $key2 }}" name="kriteria-{{ $k1 }}-{{ $k2 }}" class="form-control select-kriteria">
+                                                        @foreach($nilai as $key => $n)
+                                                            <option {{ (AHP::cariNilaiKriteria($nilai_kriteria, $k1, $k2) == $n) ? 'selected' : ''}} value="{{ $n }}">{{ "1/" . (count($nilai) - $key + 1) }}</option>
+                                                        @endforeach
                                                         @for($i = 1; $i < 10; $i++)
                                                             <option {{ (AHP::cariNilaiKriteria($nilai_kriteria, $k1, $k2) == $i) ? 'selected' : ''}} value={{$i}}>{{ $i }}</option>
                                                         @endfor
@@ -86,8 +89,8 @@
             $(document).on("change", "select.select-kriteria", function(){
                 var id = $(this).attr("id");
                 id = id.split("-");
-
-                $("#kriteria-" + id[2] + "-" + id[1]).val(1 / parseInt($(this).val()));
+                
+                $("#kriteria-" + id[2] + "-" + id[1]).val(parseFloat($(this).val()) < 1 ? Math.round(1 / parseFloat($(this).val())) : 1 / parseFloat($(this).val()));
             });
         </script>
     @endpush

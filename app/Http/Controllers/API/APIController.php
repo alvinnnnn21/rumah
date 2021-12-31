@@ -626,7 +626,7 @@ class APIController extends Controller
     }
 
     public function createAHP(Request $request)
-    {   
+    {       
         $rumah = $request->rumah;
         $kriteria = $request->kriteria;
 
@@ -683,7 +683,7 @@ class APIController extends Controller
         /// FINAL
 
         $nilai_final = AHP::getFinal($rumah_list, $kriteria_list, $bobot_rumah, $bobot_kriteria);
-
+        
         usort($nilai_final, function($a, $b) {
             return $b['nilai'] <=> $a['nilai'];
         });

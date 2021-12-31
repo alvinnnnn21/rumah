@@ -28,6 +28,9 @@
                 cursor: pointer;
             }
 
+            .card-rumah:hover{
+                cursor: pointer;
+            }
         </style>
     @endpush
 
@@ -40,7 +43,7 @@
         <div class="row mt-4">
             <div class="col-md-12 px-5 d-flex align-items-center flex-column">
                 @foreach($rumah as $r)
-                <div class="row bg-light mb-3 w-75" style="border-radius: 10px; height: 50vh; border: 2px solid #e2dfdf;">
+                <div class="row bg-light mb-3 w-75 card-rumah" onClick="window.location.href='{{ url("/rumah") . "/" . $r->idrumah }}'" style="border-radius: 10px; height: 50vh; border: 2px solid #e2dfdf;">
                     <div class="col-md-4 img-card p-0">
                         <img class="img-rumah-{{ $r->idrumah }}" src="{{ asset((count($r->gambar) > 0) ? "storage/images/rumah/" . $r->gambar[0]->gambar : "storage/images/rumah/no_image.png") }}">
                     </div>
@@ -67,7 +70,6 @@
                                 <p class="text-secondary">Bangunan</p>
                             </span>
                         </div>
-                        {{-- <p class="mt-3">{{ $r->keterangan }}</p> --}}
                         <h6>Gambar Lain</h6>
                         <div class="d-flex flex-row mb-1 img-other" style="overflow: auto;">
                             @foreach($r->gambar as $key => $g)

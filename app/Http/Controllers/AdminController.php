@@ -113,6 +113,7 @@ class AdminController extends Controller
         $rumah = Rumah::all();
 
         $kriteria = ["Carport", "Kitchen Set", "Air Bersih", "Harga", "Jumlah Kamar", "Jumlah Kamar Mandi", "Luas Tanah", "Luas Bangunan", "Daya Listrik"];
+        $nilai = [0.11111111111111, 0.125, 0.14285714285714, 0.16666666666667, 0.2, 0.25, 0.33333333333333, 0.5];
 
         $nilai_rumah = NilaiRumah::all();
         $nilai_kriteria = NilaiKriteria::all();
@@ -121,7 +122,8 @@ class AdminController extends Controller
             "nilai_rumah" => $nilai_rumah,
             "nilai_kriteria" => $nilai_kriteria,
             "rumah" => $rumah,
-            "kriteria" => $kriteria
+            "kriteria" => $kriteria,
+            "nilai" => $nilai
         ]);
     }
 

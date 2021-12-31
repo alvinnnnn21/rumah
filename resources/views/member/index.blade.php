@@ -31,6 +31,10 @@
             label{
                 font-size: 20px;
             }
+
+            .card-rumah:hover{
+                cursor: pointer;
+            }
         </style>
     @endpush
 
@@ -131,7 +135,7 @@
         <div class="row">
             <div class="col-md-12 px-5 d-flex align-items-center flex-column" id="hasil">
                 @foreach($rumah as $r)
-                    <div class="row bg-light mb-3 w-75" style="border-radius: 10px; height: 50vh; border: 2px solid #e2dfdf;">
+                    <div class="row bg-light mb-3 w-75 card-rumah" onClick="window.location.href='{{ url("/rumah") . "/" . $r->idrumah }}'" style="border-radius: 10px; height: 50vh; border: 2px solid #e2dfdf;">
                         <div class="col-md-4 img-card p-0">
                             <img class="img-rumah-{{ $r->idrumah }}" src="{{ asset((count($r->gambar) > 0) ? "storage/images/rumah/" . $r->gambar[0]->gambar : "storage/images/rumah/no_image.png") }}">
                         </div>
