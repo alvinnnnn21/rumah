@@ -155,7 +155,7 @@
                             </span>
                             <span class="ml-5">
                                 <i class="fas fa-expand-arrows-alt"></i>
-                                {{ $rumah->luas_bangunan }} m<sup>2</sup>
+                                {{ $rumah->luas_tanah }} m<sup>2</sup>
                                 <p class="text-secondary">Tanah</p>
                             </span>
                         @endif
