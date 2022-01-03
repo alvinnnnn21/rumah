@@ -43,9 +43,9 @@
         <div class="row mt-4">
             <div class="col-md-12 px-5 d-flex align-items-center flex-column">
                 @foreach($rumah as $r)
-                <div class="row bg-light mb-3 w-75 card-rumah" onClick="window.location.href='{{ url("/rumah") . "/" . $r->idrumah }}'" style="border-radius: 10px; height: 50vh; border: 2px solid #e2dfdf;">
+                <div class="row bg-light mb-3 w-75 card-rumah" style="border-radius: 10px; height: 50vh; border: 2px solid #e2dfdf;">
                     <div class="col-md-4 img-card p-0">
-                        <img class="img-rumah-{{ $r->idrumah }}" src="{{ asset((count($r->gambar) > 0) ? "storage/images/rumah/" . $r->gambar[0]->gambar : "storage/images/rumah/no_image.png") }}">
+                        <img class="img-rumah-{{ $r->idrumah }}" src="{{ asset((count($r->gambar) > 0) ? "images/rumah/" . $r->gambar[0]->gambar : "images/rumah/no_image.png") }}">
                     </div>
                     <div class="col-md-8 pt-3 d-flex flex-column justify-content-between pb-3">
                         <h4 class="my-0" style="font-weight: 700;">Rp {{ number_format($r->harga, 2, ',', '.') }}</h4>
@@ -70,11 +70,16 @@
                                 <p class="text-secondary">Bangunan</p>
                             </span>
                         </div>
-                        <h6>Gambar Lain</h6>
-                        <div class="d-flex flex-row mb-1 img-other" style="overflow: auto;">
-                            @foreach($r->gambar as $key => $g)
-                                <img data-id="{{ $r->idrumah }}" class="mr-2 {{ ($key == 0) ? "img-active" : "" }} img-carousel" style="width: 100px; height: 100px; border: 2px solid rgba(0, 0, 0, 0.2); border-radius: 10px;" src="storage/images/rumah/{{ $g->gambar }}">
-                            @endforeach
+                        @if(count($r->gambar) > 1)
+                            <h6>Gambar Lain</h6>
+                            <div class="d-flex flex-row mb-1 img-other" style="overflow: auto;">
+                                @foreach($r->gambar as $key => $g)
+                                    <img data-id="{{ $r->idrumah }}" class="mr-2 {{ ($key == 0) ? "img-active" : "" }} img-carousel" style="width: 100px; height: 100px; border: 2px solid rgba(0, 0, 0, 0.2); border-radius: 10px;" src="images/rumah/{{ $g->gambar }}">
+                                @endforeach
+                            </div>
+                        @endif
+                        <div class="text-right">
+                            <button class="btn btn-primary" onClick="window.location.href='{{ url("/rumah") . "/" . $r->idrumah }}'">Lihat Detail</button>
                         </div>
                     </div>
                 </div>

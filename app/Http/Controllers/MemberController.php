@@ -334,14 +334,16 @@ class MemberController extends Controller
 
     public function storeRumah(Request $request)
     {   
+        // dd($request->all());
+
         $request->validate([
             "alamat" => ['required', 'string', 'max:64'],
             "keterangan" => ['required', 'string'],
             "harga" =>['required', 'string', 'digits_between: 3, 11'],
             "luas_tanah" => ['required', 'string'],
             "luas_bangunan" => ['required', 'string'],
-            "jumlah_kamar" => ['required', 'string', 'digits_between: 1, 11'],
-            "jumlah_kamar_mandi" => ['required', 'string', 'digits_between: 1, 11'],
+            "jumlah_kamar" => ['required', 'string'],
+            "jumlah_kamar_mandi" => ['required', 'string'],
         ]);
 
         $provinsi = explode("-", $request->provinsi);
@@ -472,7 +474,7 @@ class MemberController extends Controller
         $previous = str_replace(url('/'), '', url()->previous());
 
         $filename = time() . "_" . rand(0, 1000) . "." . $request->file("bukti")->getClientOriginalExtension();
-        $path = $request->file("bukti")->storeAs("images/bukti", $filename);
+        $path = $request->file("bukti")->move(public_path("images/bukti", $filename));
 
         $bukti = BuktiBayar::create([
             "idtransaksi" => $request->transaksi,

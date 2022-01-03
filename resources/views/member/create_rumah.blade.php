@@ -51,11 +51,19 @@
                 </div>
                 <div class="col-md-12 mt-3 d-flex align-items-center flex-column">
                     <label>Jumlah Kamar</label>
-                    <input type="number" name="jumlah_kamar" class="form-control w-25" required>
+                    <select name="jumlah_kamar" class="form-control w-25">
+                        @for($i = 1; $i <= 10; $i++)
+                            <option value="{{ $i }}">{{ $i }} Kamar</option>
+                        @endfor
+                    </select>
                 </div>
                 <div class="col-md-12 mt-3 d-flex align-items-center flex-column">
                     <label>Jumlah Kamar Mandi</label>
-                    <input type="number" name="jumlah_kamar_mandi" class="form-control w-25" required>
+                    <select name="jumlah_kamar_mandi" class="form-control w-25">
+                        @for($i = 1; $i <= 10; $i++)
+                            <option value="{{ $i }}">{{ $i }} Kamar Mandi</option>
+                        @endfor
+                    </select>
                 </div>
                 <div class="col-md-12 mt-3 d-flex align-items-center flex-column">
                     <label>Luas Bangunan m<sup>2</sup></label>

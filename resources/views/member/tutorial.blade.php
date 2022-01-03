@@ -33,7 +33,9 @@
                 if(tutorial[i].tipe == "umum" || tutorial[i].tipe == user)
                 {
                     html += '<button data-id=' + tutorial[i].id + ' class="btn btn-tutorial">';
-                    html += '<li class="list-group-item">' + tutorial[i].tutorial + '</li>';
+                    html += '<li class="list-group-item">';
+                    html += tutorial[i].tutorial;
+                    html += "</li>";
                     html += '</button>';
                 }
             }
@@ -49,7 +51,17 @@
 
                 for(var i = 0; i < selected[0].langkah.length; i++)
                 {
-                    html += '<li class="list-group-item">' + (i + 1) + ". "  + selected[0].langkah[i] + '</li>';
+                    html += '<li class="list-group-item">'
+                    html += '<div class="d-flex flex-column align-items-center">';
+                    html +=  (i + 1) + ". "  + selected[0].langkah[i].langkah;
+
+                    for(var j = 0; j < selected[0].langkah[i].image.length; j++)
+                    {
+                        html += '<img class="mt-3" src={{ asset("images/tutorial/") }}' + "/" + selected[0].langkah[i].image[j] + ' width="400" height="400">'; 
+                    }
+
+                    html += "</div>";
+                    html += '</li>';
                 }
 
                 $(".tutorial-step").html(html);

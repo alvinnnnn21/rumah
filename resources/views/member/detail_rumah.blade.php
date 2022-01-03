@@ -88,7 +88,7 @@
                 <div class="owl-carousel owl-theme d-flex flex-column align-items-center">
                     @foreach($rumah->gambar as $key => $g)
                         <div class="item text-center">
-                            <img style="border: 2px solid black; width: 30vw; height: 50vh;"  class="img-fluid" src="{{ asset("storage/images/rumah/" . $g->gambar) }}">
+                            <img style="border: 2px solid rgb(199, 196, 196); width: 30vw; height: 50vh;"  class="img-fluid" src="{{ asset("images/rumah/" . $g->gambar) }}">
                             @if(Auth::guard("member")->check())
                                 @if($owner)
                                     <button type="button" class="btn btn-danger mt-2 btn-hapus" data-index={{$key}} data-id={{$g->idgambar}}>Hapus</i>

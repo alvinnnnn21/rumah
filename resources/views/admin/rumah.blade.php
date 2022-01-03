@@ -28,7 +28,7 @@
                                 @if($r->status == "Proses")
                                     <td>
                                         <div class="btn-group">
-                                            <button data-id="{{ $r->idrumah }}" status="Proses" class="btn btn-success btn-konfirmasi">Setuju</button>
+                                            <button data-id="{{ $r->idrumah }}" status="Setuju" class="btn btn-success btn-konfirmasi">Setuju</button>
                                             <button data-id="{{ $r->idrumah }}" status="Tolak" class="btn btn-danger btn-konfirmasi">Tolak</button>
                                         </div>
                                     </td>
@@ -94,6 +94,10 @@
                             icon: data.status,
                             html: "<b>" + data.message + "</b>",
                         });
+
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000)
                     }
                 })
 

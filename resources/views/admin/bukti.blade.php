@@ -129,7 +129,7 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <img src="{{ asset("storage/images/bukti/" . $b->bukti) }}" style="width: 100%; height: 500px;">
+                                    <img src="{{ asset("images/bukti/" . $b->bukti) }}" style="width: 100%; height: 500px;">
                                 </div>
                             </div>
                             <hr>
