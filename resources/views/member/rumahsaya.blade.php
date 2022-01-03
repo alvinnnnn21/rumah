@@ -79,7 +79,7 @@
                             </div>
                         @endif
                         <div class="text-right">
-                            <button class="btn btn-primary" onClick="window.location.href='{{ url("/rumah") . "/" . $r->idrumah }}'">Lihat Detail</button>
+                            <a class="btn btn-primary" href='{{ url("/rumah") . "/" . $r->idrumah }}'>Lihat Detail</a>
                         </div>
                     </div>
                 </div>

@@ -135,7 +135,7 @@
         <div class="row">
             <div class="col-md-12 px-5 d-flex align-items-center flex-column" id="hasil">
                 @foreach($rumah as $r)
-                    <div class="row bg-light mb-3 w-75 card-rumah" id="card-rumah-{{ $r->idrumah }}" style="border-radius: 10px; height: 50vh; border: 2px solid #e2dfdf;">
+                    <div class="row bg-light mb-3 w-75 card-rumah" style="border-radius: 10px; height: 50vh; border: 2px solid #e2dfdf;">
                         <div class="col-md-4 img-card p-0">
                             <img class="img-rumah-{{ $r->idrumah }}" src="{{ asset((count($r->gambar) > 0) ? "images/rumah/" . $r->gambar[0]->gambar : "images/rumah/no_image.png") }}">
                         </div>
@@ -171,7 +171,7 @@
                                 </div>  
                             @endif
                             <div class="text-right">
-                                <button class="btn btn-primary" onClick="window.location.href='{{ url("/rumah") . "/" . $r->idrumah }}'">Lihat Detail</button>
+                                <a class="btn btn-primary" href='{{ url("/rumah") . "/" . $r->idrumah }}'>Lihat Detail</a>
                             </div>
                         </div>
                     </div>

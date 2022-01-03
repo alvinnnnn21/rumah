@@ -371,9 +371,12 @@ class APIController extends Controller
 
     public function getSearch(Request $request)
     {
-        $rumah = Rumah::with("gambar")->where('judul', 'like', '%' . $request->keyword . '%')
-                                    ->orWhere('alamat', 'like', '%' . $request->keyword . '%')
-                                    ->get();
+        $rumah = Rumah::with("gambar")->where('alamat', 'like', '%' . $request->keyword . '%')->get();
+    
+        if($request->keyword === "")
+        {
+            $rumah = Rumah::all();
+        }
 
         return response()->json(["status" => "200", "data" => $rumah]);
     }

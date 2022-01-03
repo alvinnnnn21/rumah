@@ -622,16 +622,13 @@ class MemberController extends Controller
 
         foreach($rumah as $r)
         {
-            $html .= '<div class="row bg-light mb-3" style="border-radius: 10px; height: 60vh;">';
+            $html .= '<div class="row bg-light mb-3 w-75 card-rumah" style="border-radius: 10px; height: 50vh; border: 2px solid #e2dfdf;">';
             $html .= '<div class="col-md-4 img-card p-0">';
-            $html .= '<img class="img-rumah-' . $r->idrumah . '" src="' . asset((count($r->gambar) > 0) ? "storage/images/rumah/" . $r->gambar[0]->gambar : "storage/images/rumah/no_image.png") . '">';
+            $html .= '<img class="img-rumah-' . $r->idrumah . '" src="' . asset((count($r->gambar) > 0) ? "images/rumah/" . $r->gambar[0]->gambar : "images/rumah/no_image.png") . '">';
             $html .= '</div>';
             $html .= '<div class="col-md-8 pt-3 d-flex flex-column justify-content-between pb-3">';
-            $html .= '<h4 style="font-weight: 700;">' . $r->harga . '</h4>';
-            $html .= '<a href=' . url("/rumah") . '/' . $r->idrumah . '">';
-            $html .= '<h5 class="mt-3">' . $r->judul . '</h5>';
-            $html .= '</a>';
-            $html .= '<h6 class="text-secondary">';
+            $html .= '<h4 class="my-0" style="font-weight: 700;">Rp ' . number_format($r->harga, 2, ',', '.') . '</h4>';
+            $html .= '<h6 class="text-secondary my-0">';
             $html .= '<i class="fas fa-map-marker-alt mr-2 mt-3 text-danger"></i>';
             $html .= $r->alamat;
             $html .= '</h6>';
@@ -652,13 +649,18 @@ class MemberController extends Controller
             $html .= '<p class="text-secondary">Bangunan</p>';
             $html .= '</span>';
             $html .= '</div>';
-            $html .= '<p class="mt-3">' . $r->keterangan . '</p>';
-            $html .= '<h6 class="mb-3">Gambar Lain</h6>';
-            $html .= '<div class="d-flex flex-row mb-1 img-other" style="overflow: auto;">';
-            foreach($r->gambar as $key => $g)
+            if(count($r->gambar) > 1)
             {
-                $html .= '<img data-id="' . $r->idrumah . '" class="mr-2 img-carousel' . (($key == 0) ? " img-active" : "") . '" style="width: 100px; height: 100px; border: 2px solid rgba(0, 0, 0, 0.2); border-radius: 10px;" src="' . asset("storage/images/rumah/" . $g->gambar ) . '">';
+                $html .= '<h6 class="mb-3">Gambar Lain</h6>';
+                $html .= '<div class="d-flex flex-row mb-1 img-other" style="overflow: auto;">';
+                foreach($r->gambar as $key => $g)
+                {
+                    $html .= '<img data-id="' . $r->idrumah . '" class="mr-2 img-carousel' . (($key == 0) ? " img-active" : "") . '" style="width: 100px; height: 100px; border: 2px solid rgba(0, 0, 0, 0.2); border-radius: 10px;" src="' . asset("images/rumah/" . $g->gambar ) . '">';
+                }
+                $html .= '</div>';
             }
+            $html .= '<div class="text-right">';
+            $html .= '<a class="btn btn-primary" href=' . url("/rumah") . "/" . $r->idrumah . '>Lihat Detail</a>';
             $html .= '</div>';
             $html .= '</div>';  
             $html .= '</div>';
