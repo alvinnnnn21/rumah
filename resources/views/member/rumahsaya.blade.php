@@ -87,7 +87,7 @@
             </div>
         </div>
         <a href="{{ url('/tambahrumah') }}" style="color: white;">
-            <div class="fab mb-3 mr-3 bg-secondary p-4" style="bottom: 0; border-radius: 50%; float: right;">
+            <div class="fab mb-3 mr-3 bg-secondary p-4 position-absolute" style="bottom: 0; right: 0; border-radius: 50%; float: right;">
                 <i class="fas fa-plus"></i>
             </div> 
         </a>

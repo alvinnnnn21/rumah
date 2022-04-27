@@ -166,6 +166,9 @@
                     <div class="w-50">
                         <h4 class="mb-5 mt-2">Informasi Detail Rumah</h4>
                         @if($owner)
+                            <label>Status</label>
+                            <input type="text" name="alamat" class="form-control" value="{{ $rumah->alamat }}" required> 
+                            <hr>
                             <label>Alamat</label>
                             <input type="text" name="alamat" class="form-control" value="{{ $rumah->alamat }}" required> 
                             <hr>
@@ -283,7 +286,13 @@
                                     <input type="date" id="rent-end" name="akhir" class="form-control" required readonly>
                                 </div>
                             </div>
-                            <div class="row mt-5 d-none" id="detail">
+                            <div class="row mt-3 d-none detail">
+                                <div class="col-md-6">
+                                    <label>DP (Rupiah)</label>
+                                    <input type="number" id="dp" name="dp" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mt-5 d-none detail">
                                 <div class="col-md-12">
                                     <h6>DETAIL SEWA</h6>
                                     <hr>
@@ -291,6 +300,11 @@
                                 <div class="col-md-12">
                                     <table class="table table-borderless">
                                         <thead>
+                                            <tr>
+                                                <th>No Rekening</th>
+                                                <th>:</th>
+                                                <th id="no-rekening">{{ $rumah->pemilik->no_rekening ? $rumah->pemilik->no_rekening : "-" }}</th>
+                                            </tr>
                                             <tr>
                                                 <th>Lama Sewa</th>
                                                 <th>:</th>
@@ -329,6 +343,7 @@
             var rumah = {!! json_encode($rumah) !!}
             var hapus = [];
             var gambar = JSON.parse(JSON.stringify({!! json_encode($rumah->gambar) !!}));
+            var total = 0;
 
             var items = gambar.length;
             var loop = false;
@@ -403,7 +418,7 @@
 
                 if($("#rent-start").val().length != 0 && $("#rent-duration").val().length != 0)
                 {
-                    $("#detail").removeClass("d-none");
+                    $(".detail").removeClass("d-none");
                 }
             });
 
@@ -417,7 +432,8 @@
                 var date = new Date($("#rent-start").val());
                 date.setFullYear(parseInt(date.getFullYear()) + parseInt(event.target.value));
 
-                $("#total-harga").html(formatRupiah(parseInt({!! json_encode($rumah->harga) !!} * event.target.value)));
+                total = parseInt({!! json_encode($rumah->harga) !!} * event.target.value);
+                $("#total-harga").html(formatRupiah(total));
                 $("#lama-sewa").html(event.target.value + " Tahun");
                 
 
@@ -429,7 +445,7 @@
 
                 if($("#rent-start").val().length != 0 && $("#rent-duration").val().length != 0)
                 {
-                    $("#detail").removeClass("d-none");
+                    $(".detail").removeClass("d-none");
                 }
             });
 
@@ -437,6 +453,14 @@
                 if($("#rent-start").val().length != 0 && $("#rent-duration").val().length != 0)
                 {
                     $("#form-sewa").submit();
+                }
+            });
+
+            $("#dp").keyup(function(){
+                if($(this).val() > total)
+                {
+                    alert("DP tidak boleh melebihi total bayar");
+                    $(this).val(0);
                 }
             });
 

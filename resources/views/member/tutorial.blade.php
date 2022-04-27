@@ -25,7 +25,7 @@
         
         <script>
 
-            var user = {!! json_encode(Auth::guard()->user()->roles) !!}
+            var user = {!! json_encode(Auth::user() ? Auth::guard()->user()->roles : "umum") !!}
             var html = "";
 
             for(var i = 0; i < tutorial.length; i++)

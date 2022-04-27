@@ -79,7 +79,7 @@ class MemberController extends Controller
             }      
             
             if(!is_null($request->luas_tanah))
-            {   
+            {       
                 $luas = str_replace(".", "", $request->luas_tanah);
                 $split = explode("-", $luas);
 
@@ -91,7 +91,7 @@ class MemberController extends Controller
                 }
             }
             if(!is_null($request->luas_bangunan))
-            {
+            {   
                 $luas = str_replace(".", "", $request->luas_bangunan);
                 $split = explode("-", $luas);
 
@@ -116,6 +116,7 @@ class MemberController extends Controller
             else if(!isset($request->kitchen_set)) $rumah = $rumah->where("kitchen_set", "Tidak Ada");
 
             $rumah = $rumah->get();
+            
 
             if(count($rumah) == 0)
             {
@@ -251,10 +252,10 @@ class MemberController extends Controller
     }
 
     public function getFavorit()
-    {
-        $rumah = Rumah::with(["favorite" => function($favorite){
-            $favorite->where("idpenyewa", Auth::user()->iduser)->get();
-        }])->get();
+    {   
+        $favorit = Favorite::where("idpenyewa", Auth::user()->iduser)->get()->pluck("idrumah")->toArray();
+        
+        $rumah = Rumah::with(["favorite"])->whereIn("idrumah", $favorit)->get();
 
         return view("member.favorit")->with([
             "rumah" => $rumah
@@ -454,18 +455,33 @@ class MemberController extends Controller
     {       
         $rumah = Rumah::where("idrumah", $request->rumah)->first();
 
+        $rumah->where("idrumah", $request->rumah)->update([        
+            "status" => "Proses"
+        ]);
+
         $transaksi = TransaksiSewa::create([
             "iduser" => Auth::guard("member")->user()->iduser,
             "idrumah" => $request->rumah,
             "lama_sewa" => $request->lama,
             "mulai_sewa" => date("Y-m-d H:i:s", strtotime($request->mulai)),
             "selesai_sewa" => date("Y-m-d H:i:s", strtotime($request->akhir)),
-            "total" => $rumah->harga * $request->lama
+            "total" => $rumah->harga * $request->lama,
+            "dp" => $request->dp ? $request->dp : 0
         ]);
+
+        return redirect("/sukses-sewa/" . "30");
+    }   
+
+    public function suksesSewa($id)
+    {       
+        $transaksi = TransaksiSewa::where("id_transaksi_sewa", $id)->first();
+        $rumah = Rumah::where("id_rumah", $transaksi->idrumah);
+
 
         return view("member.sukses")->with([
             "rumah" => $rumah,
             "transaksi" => $transaksi,
+            "footer" => false
         ]);
     }
 
@@ -474,7 +490,7 @@ class MemberController extends Controller
         $previous = str_replace(url('/'), '', url()->previous());
 
         $filename = time() . "_" . rand(0, 1000) . "." . $request->file("bukti")->getClientOriginalExtension();
-        $path = $request->file("bukti")->move(public_path("images/bukti", $filename));
+        $path = $request->file("bukti")->move(public_path("images/bukti", $filename))->getFilename();
 
         $bukti = BuktiBayar::create([
             "idtransaksi" => $request->transaksi,

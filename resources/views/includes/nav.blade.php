@@ -20,7 +20,13 @@
                 
             </div>
         </li>
+        
         @if(Auth::guard("member")->check())
+            <div class="d-flex align-items-center">
+                <a href="{{ url("/") }}">
+                    <h4 class="text-white m-0">JUDUL APLIKASI</h4>
+                </a>
+            </div>
             <div class="d-flex flex-row">
                 <li class="dropdown">
                     <a href="{{ url("/tutorial") }}" class="btn btn-secondary d-flex flex-row align-items-center">
@@ -54,6 +60,18 @@
                     </div>
                 </li>
             </div>  
+        @else 
+            <div class="d-flex align-items-center">
+                <a href="{{ url("/") }}">
+                    <h4 class="text-white m-0">JUDUL APLIKASI</h4>
+                </a>
+            </div>
+            <li class="dropdown">
+                <a href="{{ url("/tutorial") }}" class="btn btn-secondary d-flex flex-row align-items-center">
+                    <i class="fas fa-book-open mr-3" style="font-size: 25px;"></i>
+                    <h6>Baca Aku</h6>
+                </a>
+            </li>
         @endif
     </ul>
 </nav>

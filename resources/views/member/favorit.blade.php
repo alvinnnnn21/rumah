@@ -31,24 +31,8 @@
     @endpush
 
     <div class="container-fluid" style="background-color: rgba(0, 0, 0, 0.06); min-height: 90vh;">
-        <div class="row d-flex justify-content-center pt-3">
-            <div class="col-md-6">
-                <form action="{{ url("/login") }}" method="post">
-                    <div class="input-group mb-2 mr-sm-2">
-                        <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <a type="submit" role="button">
-                                    <i class="fas fa-search"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col-md-12 px-5 d-flex align-items-center flex-column">
+        <div class="row">
+            <div class="col-md-12 px-5 mt-5 d-flex align-items-center flex-column">
                 @foreach($rumah as $r)
                     <div class="row bg-light mb-3 w-75 card-rumah" style="border-radius: 10px; height: 50vh; border: 2px solid #e2dfdf;">
                         <div class="col-md-4 img-card p-0">

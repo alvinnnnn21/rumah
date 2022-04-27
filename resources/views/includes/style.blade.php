@@ -26,4 +26,8 @@
         font-weight: 600;
     }
 
+    a:hover{
+        text-decoration: none;
+    }
+
 </style>

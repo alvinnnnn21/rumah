@@ -29,6 +29,7 @@ Route::group(["middleware" => "auth:admin"], function(){
     Route::delete("/rumah/{id}", [AdminController::class, "destroyRumah"]);
 
     Route::post("/kriteria", [AdminController::class, "storeKriteria"]);
+
 });
 
 Route::group(["middleware" => "auth:member"], function(){
@@ -45,7 +46,8 @@ Route::group(["middleware" => "auth:member"], function(){
     Route::get("/tambahrumah", [MemberController::class, "createRumah"]);
     Route::get("/transaksi", [MemberController::class, "getTransaksi"]);
     Route::get("/notifikasi/{id}", [MemberController::class, "getNotifikasi"]);
-    Route::get("/tutorial", [MemberController::class, "getTutorial"]);
+    Route::get("/sukses-sewa/{id}", [MemberController::class, "suksesSewa"])->name("sukes-sewa");
+
 
     Route::post("/chat", [MemberController::class, "storeChat"]);
     Route::post("/reminder", [MemberController::class, "storeReminder"]);
@@ -53,7 +55,7 @@ Route::group(["middleware" => "auth:member"], function(){
     Route::post("/favorite", [MemberController::class, "storeFavorite"]);
     Route::post("/sewa", [MemberController::class, "storeSewa"]);
     Route::post("/bukti", [MemberController::class, "storeBukti"]);
-    Route::post("/ahp", [MemberController::class, "storeAHP"]);
+    Route::get("/ahp", [MemberController::class, "storeAHP"]);
 
     Route::put("/akun", [MemberController::class, "updateAkun"]);
     Route::put("/reminder/{id}", [MemberController::class, "updateReminder"]);
@@ -68,5 +70,7 @@ Route::get("/rumah/{id}", [MemberController::class, "getDetailRumah"]);
 
 Route::post("/ahp", [MemberController::class, "storeAHP"]);
 Route::post("/search", [MemberController::class, "storeSearch"]);
+Route::get("/tutorial", [MemberController::class, "getTutorial"]);
+
 
 require __DIR__.'/auth.php';

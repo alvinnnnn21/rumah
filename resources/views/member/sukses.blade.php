@@ -22,6 +22,7 @@
         <div class="row mt-2">
             <div class="col-md-12 text-center">
                 <h3 class="text-secondary">FORMULIR SEWA RUMAH BERHASIL DIKIRIM</h3>
+                <h5 class="text-secondary">SILAHKAN TRANSFER DALAM WAKTU 24 JAM</h5>
             </div>
         </div>
         <div class="row mt-3">
@@ -40,7 +41,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <form method="post" action="{{ url("/bukti") }}" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="transaksi" value="{{ $transaksi->id }}">
+                <input type="hidden" name="transaksi" value="{{ $transaksi->id_transaksi_sewa }}">
                 <div class="modal-content">
                     <div class="modal-body">
                         <div class="container-fluid">

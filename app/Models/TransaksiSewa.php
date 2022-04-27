@@ -15,7 +15,8 @@ class TransaksiSewa extends Model
         "mulai_sewa",
         "selesai_sewa",
         "total",
-        "status"
+        "status",
+        "dp"
     ];
     public $timestamps = false;
 

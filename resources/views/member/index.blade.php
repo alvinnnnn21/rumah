@@ -32,9 +32,9 @@
                 font-size: 20px;
             }
 
-            .card-rumah:hover{
+            /* .card-rumah:hover{
                 cursor: pointer;
-            }
+            } */
         </style>
     @endpush
 
@@ -141,10 +141,12 @@
                         </div>
                         <div class="col-md-8 pt-3 d-flex flex-column justify-content-between pb-3">
                             <h4 class="my-0" style="font-weight: 700;">Rp {{ number_format($r->harga, 2, ',', '.') }}</h4>
-                            <h6 class="text-secondary my-0">
-                                <i class="fas fa-map-marker-alt mr-2 text-danger"></i>
-                                {{ $r->alamat }}
-                            </h6>
+                            <a href="https://www.google.com/maps/search/{{ $r->alamat }}">
+                                <h6 class="text-secondary my-0">
+                                    <i class="fas fa-map-marker-alt mr-2 text-danger"></i>
+                                    {{ $r->alamat }}
+                                </h6>
+                            </a>
                             <div class="d-flex flex-row" style="font-size: 20px;">
                                 <span>
                                     <i class="fas fa-bed"></i>
