@@ -48,7 +48,6 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
                         <a href="{{ url('/akun') }}" class="dropdown-item" type="button">Akun Saya</a>
-                        <a href="{{ url('/notifikasi') }}" class="dropdown-item" type="button">Notifikasi</a>
                         @if(Auth::guard("member")->user()->roles === "pemilik")
                             <a href="{{ url('/rumahsaya') }}" class="dropdown-item" type="button">Rumah Saya</a>
                         @endif

@@ -48,7 +48,6 @@ Route::group(["middleware" => "auth:member"], function(){
     Route::get("/notifikasi/{id}", [MemberController::class, "getNotifikasi"]);
     Route::get("/sukses-sewa/{id}", [MemberController::class, "suksesSewa"])->name("sukes-sewa");
 
-
     Route::post("/chat", [MemberController::class, "storeChat"]);
     Route::post("/reminder", [MemberController::class, "storeReminder"]);
     Route::post("/rumah", [MemberController::class, "storeRumah"]);

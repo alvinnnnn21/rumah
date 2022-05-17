@@ -37,7 +37,17 @@
         @endif
         <form method="post" action={{url('/login')}}>
             @csrf
-            <div class="row mt-3 d-flex justify-content-center">
+            <div class="form-group row d-flex justify-content-center" style="margin-top: 40px;">
+                <label class="text-secondary col-1">Username</label>
+                <input name="username" type="text" class="form-control w-50 col-3">
+            </div>
+            <div class="form-group row d-flex justify-content-center" style="margin-top: 40px;">
+                <label class="text-secondary col-1">Password</label>
+                <input name="password" type="password" class="form-control w-50 col-3">
+            </div>
+
+
+            {{-- <div class="row mt-3 d-flex justify-content-center">
                 <div class="col-md-6 d-flex align-items-center flex-column text-center font-weight-bold">
                     <label class="text-secondary">Username</label>
                     <input name="username" type="text" class="form-control w-50">
@@ -48,7 +58,7 @@
                     <label class="text-secondary">Password</label>
                     <input name="password" type="password" class="form-control w-50">
                 </div>
-            </div>
+            </div> --}}
             <div class="row mt-5 d-flex justify-content-center">
                 <div class="col-md-6 text-center">
                     <button type="submit" class="btn btn-secondary w-25">Login</button>

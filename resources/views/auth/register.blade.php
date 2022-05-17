@@ -34,13 +34,73 @@
         @endif
         <form method="post" action={{url('/register')}}>
             @csrf
-            <div class="row mt-3 d-flex justify-content-center">
+            <div class="row d-flex justify-content-center mt-4">
+                <table class="w-75">
+                    <tr>
+                        <td style="padding-right: 40px;">
+                            <div class="form-check d-flex justify-content-end">
+                                <div>
+                                    <input class="form-check-input" type="radio" name="roles" id="exampleRadios1" value="pemilik" checked>
+                                    <label class="form-check-label" for="exampleRadios1">
+                                        Pemilik Rumah
+                                    </label>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="padding-left: 40px;">
+                            <div class="form-check d-flex justify-content-start">
+                                <div>
+                                    <input class="form-check-input" type="radio" name="roles" id="exampleRadios2" value="penyewa">
+                                    <label class="form-check-label" for="exampleRadios2">
+                                        Penyewa Rumah
+                                    </label>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top: 30px;"> 
+                            <div class="form-group row d-flex justify-content-center">
+                                <label class="text-secondary col-2">Nama</label>
+                                <input name="nama" type="text" class="form-control w-50 col-6" required>
+                            </div>
+                        </td>
+                        <td style="padding-top: 30px;">
+                            <div class="form-group row d-flex justify-content-center">
+                                <label class="text-secondary col-2">Email</label>
+                                <input name="email" type="email" class="form-control w-50 col-6" required>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top: 30px;">
+                            <div class="form-group row d-flex justify-content-center">
+                                <label class="text-secondary col-2">Username</label>
+                                <input name="username" type="text" class="form-control w-50 col-6" required>
+                            </div>
+                        </td>
+                        <td style="padding-top: 30px;">
+                            <div class="form-group row d-flex justify-content-center">
+                                <label class="text-secondary col-2">Password</label>
+                                <input name="password" type="password" class="form-control w-50 col-6" required>  
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top: 30px;">
+                            <div class="form-group row d-flex justify-content-center">
+                                <label class="text-secondary col-2">Telepon</label>
+                                <input name="no_telpon" type="number" class="form-control w-50 col-6" required>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            {{-- <div class="row mt-3 d-flex justify-content-center">
                 <div class="col-md-6 d-flex align-items-center flex-column text-center font-weight-bold">
                     <label class="text-secondary">Nama</label>
                     <input name="nama" type="text" class="form-control w-50" required>
                 </div>
-            </div>
-            <div class="row mt-3 d-flex justify-content-center">
                 <div class="col-md-6 d-flex align-items-center flex-column text-center font-weight-bold">
                     <label class="text-secondary">Email</label>
                     <input name="email" type="email" class="form-control w-50" required>
@@ -51,8 +111,6 @@
                     <label class="text-secondary">Username</label>
                     <input name="username" type="text" class="form-control w-50" required>
                 </div>
-            </div>
-            <div class="row mt-2 d-flex justify-content-center">
                 <div class="col-md-6 d-flex align-items-center flex-column text-center font-weight-bold">
                     <label class="text-secondary">Password</label>
                     <input name="password" type="password" class="form-control w-50" required>
@@ -79,7 +137,7 @@
                         </label>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <div class="row mt-5 d-flex justify-content-center mb-3">
                 <div class="col-md-6 text-center">
                     <button type="submit" class="btn btn-secondary w-25">Register</button>

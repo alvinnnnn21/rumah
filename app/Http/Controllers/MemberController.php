@@ -200,10 +200,15 @@ class MemberController extends Controller
     }
 
     public function getDetailRumah($id)
-    {   
+    {       
         $owner = false;
         $fasilitas = [];
         $chat = [];
+        $status = [
+            "Kosong",
+            "Proses",
+            "Disewa",
+        ];
         
         if(Auth::guard("member")->check())
         {
@@ -226,12 +231,18 @@ class MemberController extends Controller
         if($rumah->carport == "Ada") array_push($fasilitas, "Car Port");
         if($rumah->kitchen_set == "Ada") array_push($fasilitas, "Kitchen Set");
 
+        if($rumah->status == "Disewa" && !$owner)
+        {
+            return redirect("/");
+        }
+
         return view("member.detail_rumah")->with([
             "rumah" => $rumah,
             "title" => "Detail Rumah",
             "fasilitas" => $fasilitas,
             "owner" => $owner,
-            "chat" => $chat
+            "chat" => $chat,
+            "status" => $status,
         ]);
     }
 
@@ -397,6 +408,7 @@ class MemberController extends Controller
             "air_bersih" => $request->air_bersih,
             "carport" => $request->carport,
             "kitchen_set" =>  $request->kitchen_set,
+            "status" => $request->status
         ]);
 
         if($request->gambar)
@@ -466,17 +478,17 @@ class MemberController extends Controller
             "mulai_sewa" => date("Y-m-d H:i:s", strtotime($request->mulai)),
             "selesai_sewa" => date("Y-m-d H:i:s", strtotime($request->akhir)),
             "total" => $rumah->harga * $request->lama,
-            "dp" => $request->dp ? $request->dp : 0
+            "dp" => $request->dp ? $request->dp : 0,
+            "batas_waktu_transaksi" => date("Y-m-d H:i:s", time() + 24 * 60 * 60)
         ]);
 
-        return redirect("/sukses-sewa/" . "30");
+        return redirect("/sukses-sewa/" . $transaksi->id);
     }   
 
     public function suksesSewa($id)
     {       
         $transaksi = TransaksiSewa::where("id_transaksi_sewa", $id)->first();
         $rumah = Rumah::where("id_rumah", $transaksi->idrumah);
-
 
         return view("member.sukses")->with([
             "rumah" => $rumah,
@@ -490,7 +502,7 @@ class MemberController extends Controller
         $previous = str_replace(url('/'), '', url()->previous());
 
         $filename = time() . "_" . rand(0, 1000) . "." . $request->file("bukti")->getClientOriginalExtension();
-        $path = $request->file("bukti")->move(public_path("images/bukti", $filename))->getFilename();
+        $path = $request->file("bukti")->move(public_path("images/bukti"), $filename)->getFilename();
 
         $bukti = BuktiBayar::create([
             "idtransaksi" => $request->transaksi,
@@ -711,7 +723,7 @@ class MemberController extends Controller
             $html .= '<p style="font-size: 12px;">';
             $html .= $data->message;
             $html .= '</p>';
-            if($data->status === "Gagal")
+            if($data->status === "Gagal" && isset($data->data))
             {
                 $html .= '<button class="btn btn-primary mb-2" data-toggle="modal" data-target="#modal-upload-' . $data->data->id_transaksi_sewa . '">Upload Ulang</button>';
                 

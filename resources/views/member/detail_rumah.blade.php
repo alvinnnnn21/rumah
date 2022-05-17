@@ -166,8 +166,23 @@
                     <div class="w-50">
                         <h4 class="mb-5 mt-2">Informasi Detail Rumah</h4>
                         @if($owner)
+                            {{-- @if($rumah->status != "Ditolak" && $rumah->status != "Proses")
+                                <label>Status</label>
+                                <select class="form-control" name="status">
+                                    @foreach($status as $s)
+                                        <option {{ $s == $rumah->status ? "selected" : "" }} value="{{ $s }}">{{ $s }}</option>
+                                    @endforeach
+                                </select>
+                            @else
+                                <label>Status</label>
+                                <span class="d-block">{{ $rumah->status }}</span>
+                            @endif --}}
                             <label>Status</label>
-                            <input type="text" name="alamat" class="form-control" value="{{ $rumah->alamat }}" required> 
+                            <select class="form-control" name="status">
+                                @foreach($status as $s)
+                                    <option {{ $s == $rumah->status ? "selected" : "" }} value="{{ $s }}">{{ $s }}</option>
+                                @endforeach
+                            </select>
                             <hr>
                             <label>Alamat</label>
                             <input type="text" name="alamat" class="form-control" value="{{ $rumah->alamat }}" required> 
@@ -180,8 +195,9 @@
                             <hr>
                             <label>Air Bersih</label>
                             <select class="form-control w-25" name="air_bersih">
-                                <option {{($rumah->air_bersih == "Tidak Ada") ? "selected" : ""}} value="Tidak Ada">Tidak Ada</option>
-                                <option {{($rumah->air_bersih == "Ada") ? "selected" : ""}} value="Ada">Ada</option>
+                                <option {{($rumah->air_bersih == "Tidak Ada Air Bersih") ? "selected" : ""}} value="Tidak Ada">Tidak Ada Air Bersih</option>
+                                <option {{($rumah->air_bersih == "PDAM") ? "selected" : ""}} value="PDAM">PDAM</option>
+                                <option {{($rumah->air_bersih == "Air Sumur") ? "selected" : ""}} value="Air Sumur">Air Sumur</option>
                             </select>
                             <hr>
                             <label>Carport</label>

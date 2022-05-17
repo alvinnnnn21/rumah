@@ -548,4 +548,9 @@ class AHP
 
         return $nilai;
     }
+
+    public static function ujiKonsistensi()
+    {
+        
+    }
 }
