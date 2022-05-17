@@ -195,7 +195,7 @@
                             <hr>
                             <label>Air Bersih</label>
                             <select class="form-control w-25" name="air_bersih">
-                                <option {{($rumah->air_bersih == "Tidak Ada Air Bersih") ? "selected" : ""}} value="Tidak Ada">Tidak Ada Air Bersih</option>
+                                <option {{($rumah->air_bersih == "Tidak Ada Air Bersih") ? "selected" : ""}} value="Tidak Ada Air Bersih">Tidak Ada Air Bersih</option>
                                 <option {{($rumah->air_bersih == "PDAM") ? "selected" : ""}} value="PDAM">PDAM</option>
                                 <option {{($rumah->air_bersih == "Air Sumur") ? "selected" : ""}} value="Air Sumur">Air Sumur</option>
                             </select>
